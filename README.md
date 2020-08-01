@@ -34,8 +34,8 @@
 ## 鸣谢
 
 - 设计参考自 <a href="https://github.com/lampo1024/TsBlog" target="_blank">TsBlog</a>，感谢作者 lampo1024 的贡献
-- 设计参考自 <a href="https://github.com/nopSolutions/nopCommerce" target="_blank">nopCommerce</a>，感谢作者 lampo1024 的贡献
-- 设计参考自 <a href="https://github.com/anjoy8/Blog.Core" target="_blank">Blog.Core</a>，感谢作者 nopSolutions 的贡献
+- 设计参考自 <a href="https://github.com/nopSolutions/nopCommerce" target="_blank">nopCommerce</a>，感谢作者 nopSolutions 的贡献
+- 设计参考自 <a href="https://github.com/anjoy8/Blog.Core" target="_blank">Blog.Core</a>，感谢作者 anjoy8 的贡献
 
 ## Donate
 
