@@ -28,10 +28,9 @@ namespace WebApi.Controllers
 
         #region Actions
 
-        public ActionResult<UserInfo> Get(int id)
+        public async Task<ActionResult<UserInfo>> Get(int id)
         {
-            UserInfo viewModel = _userInfoService.Find(m => m.ID == id && !m.IsDeleted);
-
+            UserInfo viewModel = await _userInfoService.FindAsync(m => m.ID == id && !m.IsDeleted);
 
             return Ok(viewModel);
         }

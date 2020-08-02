@@ -27,9 +27,9 @@ namespace Services.Core
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public virtual IQueryable<T> All()
+        public virtual async Task<IQueryable<T>> AllAsync()
         {
-            return _repository.All();
+            return await _repository.AllAsync();
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace Services.Core
         /// </summary>
         /// <param name="predicate">Specified a filter</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IQueryable<T>> FilterAsync(Expression<Func<T, bool>> predicate)
         {
-            return _repository.Filter(predicate);
+            return await _repository.FilterAsync(predicate);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace Services.Core
         /// <param name="order">Specified a order</param>
         /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
+        public virtual async Task<PageModel<T>> FilterAsync<TOrder>(int index, int size, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
         {
-            return _repository.Filter<TOrder>(index, size, out total, filter, order, isAsc);
+            return await _repository.FilterAsync<TOrder>(index, size, filter, order, isAsc);
         }
 
         /// <summary>
@@ -62,14 +62,14 @@ namespace Services.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public virtual bool Contains(Expression<Func<T, bool>> predicate)
+        public virtual async Task<bool> ContainsAsync(Expression<Func<T, bool>> predicate)
         {
-            return _repository.Contains(predicate);
+            return await _repository.ContainsAsync(predicate);
         }
 
-        public virtual int Count(Expression<Func<T, bool>> predicate)
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
         {
-            return _repository.Count(predicate);
+            return await _repository.CountAsync(predicate);
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace Services.Core
         /// </summary>
         /// <param name="keys">Specified the search keys.</param>
         /// <returns></returns>
-        public virtual T Find(params object[] keys)
+        public virtual async Task<T> FindAsync(params object[] keys)
         {
-            return _repository.Find(keys);
+            return await _repository.FindAsync(keys);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace Services.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual T Find(Expression<Func<T, bool>> predicate)
+        public virtual async Task<T> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return _repository.Find(predicate);
+            return await _repository.FindAsync(predicate);
         }
 
         /// <summary>
@@ -97,22 +97,22 @@ namespace Services.Core
         /// </summary>
         /// <param name="t">Specified a new object to create.</param>
         /// <returns></returns>
-        public virtual void Create(T t)
+        public virtual async Task CreateAsync(T t)
         {
-            _repository.Create(t);
+            await _repository.CreateAsync(t);
 
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
         }
 
         /// <summary>
         /// Delete the object from database.
         /// </summary>
         /// <param name="t">Specified a existing object to delete.</param>
-        public virtual void Delete(T t)
+        public virtual async Task DeleteAsync(T t)
         {
-            _repository.Delete(t);
+            await _repository.DeleteAsync(t);
 
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
         }
 
         /// <summary>
@@ -120,9 +120,11 @@ namespace Services.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual int Delete(Expression<Func<T, bool>> predicate)
+        public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
-            return _repository.Delete(predicate);
+            await _repository.DeleteAsync(predicate);
+
+            await _repository.SaveChangesAsync();
         }
 
         /// <summary>
@@ -130,11 +132,11 @@ namespace Services.Core
         /// </summary>
         /// <param name="t">Specified the object to save.</param>
         /// <returns></returns>
-        public virtual void Update(T t)
+        public virtual async Task UpdateAsync(T t)
         {
-            _repository.Update(t);
+            await _repository.UpdateAsync(t);
 
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
         }
 
         /// <summary>
@@ -142,9 +144,10 @@ namespace Services.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
+        public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression)
         {
-            return All().FirstOrDefault(expression);
+            //return All().FirstOrDefault(expression);
+            return await _repository.FirstOrDefaultAsync(expression);
         }
         #endregion
 

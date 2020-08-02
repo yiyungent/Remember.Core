@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories.Core
@@ -57,9 +58,10 @@ namespace Repositories.Core
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> All()
+        public async Task<IQueryable<T>> AllAsync()
         {
-            return _context.Set<T>().AsQueryable();
+            //return _context.Set<T>().AsQueryable();
+            return await Task.Run(() => _context.Set<T>().AsQueryable());
         }
 
         /// <summary>
@@ -67,9 +69,10 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified a filter</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IQueryable<T>> FilterAsync(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where<T>(predicate).AsQueryable<T>();
+            //return _context.Set<T>().Where<T>(predicate).AsQueryable<T>();
+            return await Task.Run(() => _context.Set<T>().Where<T>(predicate).AsQueryable<T>());
         }
 
         /// <summary>
@@ -82,14 +85,23 @@ namespace Repositories.Core
         /// <param name="order">Specified a order</param>
         /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
+        public virtual async Task<PageModel<T>> FilterAsync<TOrder>(int index, int size, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
         {
+            //var skipCount = (index - 1) * size;
+            //var resultSet = _context.Set<T>().Where(filter).AsQueryable();
+            //total = resultSet.Count();
+            //resultSet = isAsc ? resultSet.OrderBy(order) : resultSet.OrderByDescending(order);
+            //resultSet = skipCount == 0 ? resultSet.Take(size) : resultSet.Skip(skipCount).Take(size);
+            //return resultSet.AsQueryable();
+
+            PageModel<T> page = new PageModel<T>();
             var skipCount = (index - 1) * size;
             var resultSet = _context.Set<T>().Where(filter).AsQueryable();
-            total = resultSet.Count();
+            page.TotalCount = resultSet.Count();
             resultSet = isAsc ? resultSet.OrderBy(order) : resultSet.OrderByDescending(order);
             resultSet = skipCount == 0 ? resultSet.Take(size) : resultSet.Skip(skipCount).Take(size);
-            return resultSet.AsQueryable();
+            page.Data = resultSet.AsQueryable();
+            return await Task.Run(() => page);
         }
 
         /// <summary>
@@ -97,14 +109,16 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public bool Contains(Expression<Func<T, bool>> predicate)
+        public async Task<bool> ContainsAsync(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Any(predicate);
+            //return _context.Set<T>().Any(predicate);
+            return await _context.Set<T>().AnyAsync(predicate);
         }
 
-        public virtual int Count(Expression<Func<T, bool>> predicate)
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Count(predicate);
+            //return _context.Set<T>().Count(predicate);
+            return await _context.Set<T>().CountAsync(predicate);
         }
 
         /// <summary>
@@ -112,9 +126,10 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="keys">Specified the search keys.</param>
         /// <returns></returns>
-        public virtual T Find(params object[] keys)
+        public virtual async Task<T> FindAsync(params object[] keys)
         {
-            return _context.Set<T>().Find(keys);
+            //return _context.Set<T>().Find(keys);
+            return await _context.Set<T>().FindAsync(keys);
         }
 
         /// <summary>
@@ -122,9 +137,10 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual T Find(Expression<Func<T, bool>> predicate)
+        public virtual async Task<T> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().FirstOrDefault<T>(predicate);
+            //return _context.Set<T>().FirstOrDefault<T>(predicate);
+            return await _context.Set<T>().FirstOrDefaultAsync<T>(predicate);
         }
 
         /// <summary>
@@ -132,9 +148,10 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="t">Specified a new object to create.</param>
         /// <returns></returns>
-        public virtual void Create(T t)
+        public virtual async Task CreateAsync(T t)
         {
-            _context.Set<T>().Add(t);
+            //_context.Set<T>().Add(t);
+            await _context.Set<T>().AddAsync(t);
 
             //_context.SaveChanges();
         }
@@ -143,9 +160,10 @@ namespace Repositories.Core
         /// Delete the object from database.
         /// </summary>
         /// <param name="t">Specified a existing object to delete.</param>
-        public virtual void Delete(T t)
+        public virtual async Task DeleteAsync(T t)
         {
-            _context.Set<T>().Remove(t);
+            //_context.Set<T>().Remove(t);
+            await Task.Run(() => _context.Set<T>().Remove(t));
 
             //_context.SaveChanges();
         }
@@ -155,12 +173,16 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual int Delete(Expression<Func<T, bool>> predicate)
+        public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
-            var objects = Filter(predicate);
+            //var objects = Filter(predicate);
+            //foreach (var obj in objects)
+            //    _context.Set<T>().Remove(obj);
+            //return _context.SaveChanges();
+
+            var objects = await FilterAsync(predicate);
             foreach (var obj in objects)
                 _context.Set<T>().Remove(obj);
-            return _context.SaveChanges();
         }
 
         /// <summary>
@@ -168,10 +190,14 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="t">Specified the object to save.</param>
         /// <returns></returns>
-        public virtual void Update(T t)
+        public virtual async Task UpdateAsync(T t)
         {
             try
             {
+                //var entry = _context.Entry(t);
+                //_context.Set<T>().Attach(t);
+                //entry.State = EntityState.Modified;
+
                 var entry = _context.Entry(t);
                 _context.Set<T>().Attach(t);
                 entry.State = EntityState.Modified;
@@ -191,26 +217,17 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public T FirstOrDefault(Expression<Func<T, bool>> expression)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression)
         {
-            return All().FirstOrDefault(expression);
+            //return All().FirstOrDefault(expression);
+            return await _context.Set<T>().FirstOrDefaultAsync(expression);
         }
 
-        public virtual void ExecuteProcedure(string procedureCommand, params object[] sqlParams)
-        {
-            _context.Database.ExecuteSqlCommand(procedureCommand, sqlParams);
-        }
-
-        public virtual void ExecuteSql(string sql)
-        {
-            _context.Database.ExecuteSqlCommand(sql);
-        }
-
-        public virtual void SaveChanges()
+        public virtual async Task SaveChangesAsync()
         {
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (InvalidOperationException ex)
             {

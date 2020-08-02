@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
 
 namespace Services.Core
 {
@@ -17,14 +18,14 @@ namespace Services.Core
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        IQueryable<T> All();
+        Task<IQueryable<T>> AllAsync();
 
         /// <summary>
         /// Gets objects from database by filter.
         /// </summary>
         /// <param name="predicate">Specified a filter</param>
         /// <returns></returns>
-        IQueryable<T> Filter(Expression<Func<T, bool>> predicate);
+        Task<IQueryable<T>> FilterAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Gets objects from database with filtering and paging.
@@ -36,63 +37,63 @@ namespace Services.Core
         /// <param name="order">Specified a order</param>
         /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true);
+        Task<PageModel<T>> FilterAsync<TOrder>(int index, int size, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true);
 
         /// <summary>
         /// Gets the object(s) is exists in database by specified filter.
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        bool Contains(Expression<Func<T, bool>> predicate);
+        Task<bool> ContainsAsync(Expression<Func<T, bool>> predicate);
 
-        int Count(Expression<Func<T, bool>> predicate);
+        Task<int> CountAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Find object by keys.
         /// </summary>
         /// <param name="keys">Specified the search keys.</param>
         /// <returns></returns>
-        T Find(params object[] keys);
+        Task<T> FindAsync(params object[] keys);
 
         /// <summary>
         /// Find object by specified expression.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        T Find(Expression<Func<T, bool>> predicate);
+        Task<T> FindAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Create a new object to database.
         /// </summary>
         /// <param name="t">Specified a new object to create.</param>
         /// <returns></returns>
-        void Create(T t);
+        Task CreateAsync(T t);
 
         /// <summary>
         /// Delete the object from database.
         /// </summary>
         /// <param name="t">Specified a existing object to delete.</param>
-        void Delete(T t);
+        Task DeleteAsync(T t);
 
         /// <summary>
         /// Delete objects from database by specified filter expression.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        int Delete(Expression<Func<T, bool>> predicate);
+        Task DeleteAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Update object changes and save to database.
         /// </summary>
         /// <param name="t">Specified the object to save.</param>
         /// <returns></returns>
-        void Update(T t);
+        Task UpdateAsync(T t);
 
         /// <summary>
         /// Select Single Item by specified expression.
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        T FirstOrDefault(Expression<Func<T, bool>> expression);
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression);
     }
 }
