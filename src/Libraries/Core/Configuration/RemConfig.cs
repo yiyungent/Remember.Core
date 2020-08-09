@@ -11,5 +11,7 @@
         /// Gets or sets Redis connection string. Used when Redis is enabled
         /// </summary>
         public string RedisConnectionString { get; set; }
+
+        public string DbType { get; set; }
     }
 }

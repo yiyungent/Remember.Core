@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.21" />
   </ItemGroup>
 
@@ -14,12 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates\T4_ImplementRepository.tt">
+    <None Update="Auto\Implement\T4_ImplementRepository.tt">
+      <LastGenOutput>T4_ImplementRepository.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="Templates\T4_InterfaceRepository.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+    <None Update="Auto\Interface\T4_InterfaceRepository.tt">
       <LastGenOutput>T4_InterfaceRepository.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
 
@@ -28,7 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Templates\T4_InterfaceRepository.cs">
+    <Compile Update="Auto\Implement\T4_ImplementRepository.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4_ImplementRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Auto\Interface\T4_InterfaceRepository.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>T4_InterfaceRepository.tt</DependentUpon>

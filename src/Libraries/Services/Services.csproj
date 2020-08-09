@@ -11,12 +11,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates\T4_ImplementService.tt">
+    <None Update="Auto\Implement\T4_ImplementService.tt">
+      <LastGenOutput>T4_ImplementService.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="Templates\T4_InterfaceService.tt">
+    <None Update="Auto\Interface\T4_InterfaceService.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_InterfaceService.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Auto\Implement\T4_ImplementService.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4_ImplementService.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Auto\Interface\T4_InterfaceService.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4_InterfaceService.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

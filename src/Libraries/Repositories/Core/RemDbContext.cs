@@ -5,6 +5,7 @@ namespace Repositories.Core
 {
     public partial class RemDbContext : DbContext
     {
+        #region Ctor
         public RemDbContext(DbContextOptions<RemDbContext> options)
             : base(options)
         {
@@ -23,31 +24,62 @@ namespace Repositories.Core
             //    System.Diagnostics.Debug.WriteLine(str);
             //};
         }
+        #endregion
 
         #region Tables
 
         public virtual DbSet<Article> Article { get; set; }
+
         public virtual DbSet<Article_Cat> Article_Cat { get; set; }
-        public virtual DbSet<Comment> Comment { get; set; }
-        public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
-        public virtual DbSet<Comment_Like> Comment_Like { get; set; }
+
+        public virtual DbSet<Article_Comment> Article_Comment { get; set; }
+
+        public virtual DbSet<Article_Dislike> Article_Dislike { get; set; }
+
+        public virtual DbSet<Article_Like> Article_Like { get; set; }
+
         public virtual DbSet<Article_Participant> Article_Participant { get; set; }
-        public virtual DbSet<Favorite> Favorite { get; set; }
-        public virtual DbSet<Favorite_Article> Favorite_BookInfo { get; set; }
-        public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
-        public virtual DbSet<FunctionInfo> FunctionInfo { get; set; }
-        public virtual DbSet<LogInfo> LogInfo { get; set; }
-        public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
-        public virtual DbSet<RoleInfo> RoleInfo { get; set; }
-        public virtual DbSet<Setting> Setting { get; set; }
-        public virtual DbSet<Sys_Menu> Sys_Menu { get; set; }
-        public virtual DbSet<ThemeTemplate> ThemeTemplate { get; set; }
-        public virtual DbSet<UserInfo> UserInfo { get; set; }
-        public virtual DbSet<Role_Function> Role_Function { get; set; }
-        public virtual DbSet<Role_Menu> Role_Menu { get; set; }
-        public virtual DbSet<Role_User> Role_User { get; set; }
+
         public virtual DbSet<CatInfo> CatInfo { get; set; }
 
+        public virtual DbSet<Comment> Comment { get; set; }
+
+        public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
+
+        public virtual DbSet<Comment_Like> Comment_Like { get; set; }
+
+        public virtual DbSet<Favorite> Favorite { get; set; }
+
+        public virtual DbSet<Favorite_Article> Favorite_Article { get; set; }
+
+        public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
+
+        public virtual DbSet<FunctionInfo> FunctionInfo { get; set; }
+
+        public virtual DbSet<LogInfo> LogInfo { get; set; }
+
+        public virtual DbSet<Message> Message { get; set; }
+
+        public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
+
+        public virtual DbSet<Role_Function> Role_Function { get; set; }
+
+        public virtual DbSet<Role_Menu> Role_Menu { get; set; }
+
+        public virtual DbSet<Role_User> Role_User { get; set; }
+
+        public virtual DbSet<RoleInfo> RoleInfo { get; set; }
+
+        public virtual DbSet<Setting> Setting { get; set; }
+
+        public virtual DbSet<Sys_Menu> Sys_Menu { get; set; }
+
+        public virtual DbSet<ThemeTemplate> ThemeTemplate { get; set; }
+
+        public virtual DbSet<UserInfo> UserInfo { get; set; }
+
+
+        
         #endregion
 
         #region OnModelCreating

@@ -1,4 +1,5 @@
-﻿using Core.Infrastructure;
+﻿using System.IO;
+using Core.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,49 @@ namespace Framework.Infrastructure
     {
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<RemDbContext>(options =>
-                options.UseMySQL(configuration.GetConnectionString("DefaultConnection")));
+            #region 选择数据库类型
+            string dbType = configuration["Rem:DbType"];
+            string connStr = configuration.GetConnectionString("DefaultConnection");
+            switch (dbType.ToLower())
+            {
+                case "sqlite":
+
+                    if (connStr.StartsWith("~"))
+                    {
+                        // 相对路径转绝对路径
+                        string dir = Directory.GetCurrentDirectory();
+                        string dbFilePath = Path.Combine(dir, connStr);
+
+                        connStr = dbFilePath;
+                    }
+
+                    services.AddDbContext<RemDbContext>(options =>
+                        options.UseSqlite(connStr));
+                    break;
+                case "mysql":
+                    services.AddDbContext<RemDbContext>(options =>
+                        options.UseMySQL(connStr));
+                    break;
+                case "sqlserver":
+                    services.AddDbContext<RemDbContext>(options =>
+                        options.UseSqlServer(connStr));
+                    break;
+                default:
+
+                    if (connStr.StartsWith("~"))
+                    {
+                        // 相对路径转绝对路径
+                        string dir = Directory.GetCurrentDirectory();
+                        string dbFilePath = Path.Combine(dir, connStr);
+
+                        connStr = dbFilePath;
+                    }
+
+                    services.AddDbContext<RemDbContext>(options =>
+                        options.UseSqlite(connStr));
+                    break;
+            }
+            #endregion
 
             services.AddControllers();
         }
