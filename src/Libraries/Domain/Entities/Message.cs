@@ -37,7 +37,7 @@ namespace Domain.Entities
         /// </summary>
         [ForeignKey("Sender")]
         public int SenderId { get; set; }
-        [ForeignKey("AuthorId")]
+        [ForeignKey("SenderId")]
         public virtual UserInfo Sender { get; set; }
 
         /// <summary>

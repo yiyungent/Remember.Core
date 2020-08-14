@@ -16,22 +16,16 @@ namespace WebInstaller
 
         static void Main(string[] args)
         {
-            var settings = new AppSettings();
-
-            //new ConfigurationBuilder().AddConfiguration()
-
-            _configuration = new ConfigurationBuilder().Build();
-
-            // TODO: _configuration 添加appsettings.json
+            Console.WriteLine("开始初始化数据库 !");
+            _configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<RemDbContext>();
-            optionsBuilder.UseMySQL(
-                settings.ConnectionStrings.DefaultConnection);
+            optionsBuilder.UseMySQL(_configuration.GetConnectionString("DefaultConnection"));
             var dbContext = new RemDbContext(optionsBuilder.Options);
 
             DbInitializer.Initialize(dbContext);
 
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("初始化数据库完成 !");
 
             Console.ReadLine();
         }
