@@ -58,6 +58,9 @@ namespace Core.Infrastructure
             //binPath = _webHelper.MapPath("~/bin");
             LoadMatchingAssemblies(binPath);
 
+            // TODO: Debug Assemblies 用
+            var ass = AppDomain.CurrentDomain.GetAssemblies();
+
             return base.GetAssemblies();
         }
 

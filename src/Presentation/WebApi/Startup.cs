@@ -58,6 +58,9 @@ namespace WebApi
             app.ConfigureRequestPipeline();
 
             app.StartEngine();
+
+            // TODO: Debug Assemblies ”√
+            //var ass = AppDomain.CurrentDomain.GetAssemblies();
         }
 
         // ConfigureContainer is where you can register things directly

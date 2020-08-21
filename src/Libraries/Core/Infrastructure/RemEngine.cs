@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Infrastructure
 {
+    /// <summary>
+    /// 调用顺序: 1.ConfigureServices 2.RegisterDependencies 3.ConfigureRequestPipeline
+    /// </summary>
     public class RemEngine : IEngine
     {
         #region Fields
