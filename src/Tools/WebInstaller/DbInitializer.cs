@@ -11,6 +11,10 @@ namespace WebInstaller
         {
             context.Database.EnsureCreated();
 
+            int userCount = ImportUserData.Import(context);
+            Console.WriteLine($"导入 {userCount} 条用户数据");
+            int articleCount = ImportArticleData.Import(context);
+            Console.WriteLine($"导入 {articleCount} 条文章数据");
 
         }
     }

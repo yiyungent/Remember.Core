@@ -1,0 +1,19 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>安装</title>
+</head>
+<body>
+<div>
+	  @using (Html.BeginForm("StartInstall","Install"))
+	  {
+		  <input type="submit" value="开始安装" />
+	  }
+</div>
+</body>
+</html>

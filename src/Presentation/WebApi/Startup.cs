@@ -42,6 +42,9 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             (_engine, _remConfig) = services.ConfigureApplicationServices(_configuration, _webHostEnvironment);
+
+            // MVC
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +58,6 @@ namespace WebApi
             app.ConfigureRequestPipeline();
 
             app.StartEngine();
-
         }
 
         // ConfigureContainer is where you can register things directly
