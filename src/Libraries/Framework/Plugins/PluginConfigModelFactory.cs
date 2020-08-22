@@ -8,6 +8,7 @@ namespace Framework.Plugins
 {
     public class PluginConfigModelFactory
     {
+        #region 即时读取
         public static PluginConfigModel Create()
         {
             PluginConfigModel pluginConfigModel = new PluginConfigModel();
@@ -18,8 +19,10 @@ namespace Framework.Plugins
             pluginConfigModel = JsonSerializer.Deserialize<PluginConfigModel>(pluginConfigJsonStr, jsonSerializerOptions);
 
             return pluginConfigModel;
-        }
+        } 
+        #endregion
 
+        #region 保存
         public static void Save(PluginConfigModel pluginConfigModel)
         {
             if (pluginConfigModel == null)
@@ -35,6 +38,7 @@ namespace Framework.Plugins
             catch (Exception ex)
             { }
 
-        }
+        } 
+        #endregion
     }
 }

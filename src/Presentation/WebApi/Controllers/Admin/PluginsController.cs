@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,18 +18,43 @@ namespace WebApi.Controllers.Admin
 
 
         #region 插件列表
-        public async Task<ActionResult<ResponseData>> List()
+        /// <summary>
+        /// 加载插件列表
+        /// </summary>
+        /// <param name="status">插件状态</param>
+        /// <returns></returns>
+        public async Task<ActionResult<ResponseData>> List(string status = "all")
         {
+            ResponseData responseData = new ResponseData();
             var pluginConfigModel = PluginConfigModelFactory.Create();
-            // 所有插件 PluginID
-            IList<string> allPluginIds = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins).Concat(pluginConfigModel.UninstalledPlugins).ToList();
-            // TODO: 获取所有插件信息
-            IList<PluginInfoModel> pluginInfoModels = new List<PluginInfoModel>();
 
+            // 获取所有插件信息
+            IList<PluginInfoModelWrapper> pluginInfoModels = PluginInfoModelFactory.CreateAll();
+            switch (status.ToLower())
+            {
+                case "all":
+                    break;
+                case "installed":
+                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.EnabledPlugins.Contains(m.PluginID) || pluginConfigModel.DisabledPlugins.Contains(m.PluginID)).ToList();
+                    break;
+                case "enabled":
+                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.EnabledPlugins.Contains(m.PluginID)).ToList();
+                    break;
+                case "disabled":
+                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.DisabledPlugins.Contains(m.PluginID)).ToList();
+                    break;
+                case "uninstalled":
+                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.UninstalledPlugins.Contains(m.PluginID)).ToList();
+                    break;
+                default:
+                    break;
+            }
 
-            await Task.CompletedTask;
+            responseData.code = 1;
+            responseData.message = "加载插件列表成功";
+            responseData.data = pluginInfoModels;
 
-            return Content("");
+            return await Task.FromResult(responseData);
         }
         #endregion
 
