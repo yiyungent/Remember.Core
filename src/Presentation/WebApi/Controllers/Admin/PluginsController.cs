@@ -34,15 +34,15 @@ namespace WebApi.Controllers.Admin
             #region 添加插件状态信息
             foreach (var model in pluginInfoModels)
             {
-                if (pluginConfigModel.EnabledPlugins.Contains(model.PluginID))
+                if (pluginConfigModel.EnabledPlugins.Contains(model.PluginId))
                 {
                     model.Status = PluginStatus.Enabled;
                 }
-                else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginID))
+                else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginId))
                 {
                     model.Status = PluginStatus.Disabled;
                 }
-                else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginID))
+                else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginId))
                 {
                     model.Status = PluginStatus.Uninstalled;
                 }
@@ -85,17 +85,33 @@ namespace WebApi.Controllers.Admin
             PluginConfigModel pluginConfigModel = PluginConfigModelFactory.Create();
             // TODO: 效验
             #region 效验
-
+            if (string.IsNullOrEmpty(pluginId))
+            {
+                responseData.code = -1;
+                responseData.message = "安装失败, pluginId不能为空";
+                return await Task.FromResult(responseData);
+            }
             #endregion
 
-            // 1. 从 pluginConfigModel.UninstalledPlugins 移除, 添加到 pluginConfigModel.DisabledPlugins
-            pluginConfigModel.UninstalledPlugins.Remove(pluginId);
-            pluginConfigModel.DisabledPlugins.Add(pluginId);
-            // 2.保存到 plugin.config.json
-            PluginConfigModelFactory.Save(pluginConfigModel);
-            // 3. 创建插件程序集加载上下文, 添加到 PluginsLoadContexts
-            PluginsLoadContextsManager.LoadPlugin(pluginId);
+            try
+            {
+                // 1. 创建插件程序集加载上下文, 添加到 PluginsLoadContexts
+                PluginsLoadContextsManager.LoadPlugin(pluginId);
+                // 2. 从 pluginConfigModel.UninstalledPlugins 移除, 添加到 pluginConfigModel.DisabledPlugins
+                pluginConfigModel.UninstalledPlugins.Remove(pluginId);
+                pluginConfigModel.DisabledPlugins.Add(pluginId);
+                // 3.保存到 plugin.config.json
+                PluginConfigModelFactory.Save(pluginConfigModel);
 
+                responseData.code = 1;
+                responseData.message = "安装成功";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "安装失败: " + ex.Message;
+                return await Task.FromResult(responseData);
+            }
 
             return await Task.FromResult(responseData);
         }
@@ -113,16 +129,18 @@ namespace WebApi.Controllers.Admin
                 responseData.message = "删除失败: 此插件不存在, 或未卸载";
                 return await Task.FromResult(responseData);
             }
-            // 1.从 pluginConfigModel.UninstalledPlugins 移除
-            pluginConfigModel.UninstalledPlugins.Remove(pluginId);
-            // 2.保存到 plugin.config.json
-            PluginConfigModelFactory.Save(pluginConfigModel);
-            // 3.删除物理文件
+
             try
             {
-                string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins", pluginId);
+                // 1.删除物理文件
+                string pluginPath = Path.Combine(PluginPathProvider.PluginsRootPath(), pluginId);
                 var directory = new DirectoryInfo(pluginPath);
                 directory.Delete(true);
+                // 2.从 pluginConfigModel.UninstalledPlugins 移除
+                pluginConfigModel.UninstalledPlugins.Remove(pluginId);
+                // 3.保存到 plugin.config.json
+                PluginConfigModelFactory.Save(pluginConfigModel);
+
                 responseData.code = 1;
                 responseData.message = "删除成功";
             }
@@ -162,13 +180,99 @@ namespace WebApi.Controllers.Admin
                 return await Task.FromResult(responseData);
             }
             #endregion
-            // 1.从 pluginConfigModel.DisabledPlugins 移除, 添加到 pluginConfigModel.UninstalledPlugins
-            pluginConfigModel.DisabledPlugins.Remove(pluginId);
-            pluginConfigModel.UninstalledPlugins.Add(pluginId);
-            // 2.保存到 plugin.config.json
-            PluginConfigModelFactory.Save(pluginConfigModel);
-            // 3.移除插件对应的程序集加载上下文
-            PluginsLoadContextsManager.UnloadPlugin(pluginId);
+
+            try
+            {
+                // 1.移除插件对应的程序集加载上下文
+                PluginsLoadContextsManager.UnloadPlugin(pluginId);
+                // 2.从 pluginConfigModel.DisabledPlugins 移除, 添加到 pluginConfigModel.UninstalledPlugins
+                pluginConfigModel.DisabledPlugins.Remove(pluginId);
+                pluginConfigModel.UninstalledPlugins.Add(pluginId);
+                // 3.保存到 plugin.config.json
+                PluginConfigModelFactory.Save(pluginConfigModel);
+
+                responseData.code = 1;
+                responseData.message = "卸载成功";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "卸载失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
+
+        #region 启用插件
+        public async Task<ActionResult<ResponseData>> Enable(string pluginId)
+        {
+            ResponseData responseData = new ResponseData();
+            var pluginConfigModel = PluginConfigModelFactory.Create();
+            // 效验是否存在于 已禁用插件列表
+            #region 效验
+            if (!pluginConfigModel.DisabledPlugins.Contains(pluginId))
+            {
+                responseData.code = -1;
+                responseData.message = "启用失败: 此插件不存在, 或未安装";
+                return await Task.FromResult(responseData);
+            }
+            #endregion
+
+            try
+            {
+                // 1.从 pluginConfigModel.DisabledPlugins 移除
+                pluginConfigModel.DisabledPlugins.Remove(pluginId);
+                // 2. 添加到 pluginConfigModel.EnabledPlugins
+                pluginConfigModel.EnabledPlugins.Add(pluginId);
+                // 3.保存到 plugin.config.json
+                PluginConfigModelFactory.Save(pluginConfigModel);
+
+                responseData.code = 1;
+                responseData.message = "启用成功";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -2;
+                responseData.message = "启用失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
+
+        #region 禁用插件
+        public async Task<ActionResult<ResponseData>> Disable(string pluginId)
+        {
+            ResponseData responseData = new ResponseData();
+            var pluginConfigModel = PluginConfigModelFactory.Create();
+            // 效验是否存在于 已启用插件列表
+            #region 效验
+            if (!pluginConfigModel.EnabledPlugins.Contains(pluginId))
+            {
+                responseData.code = -1;
+                responseData.message = "禁用失败: 此插件不存在, 或未安装";
+                return await Task.FromResult(responseData);
+            }
+            #endregion
+
+            try
+            {
+                // 1.从 pluginConfigModel.EnabledPlugins 移除
+                pluginConfigModel.EnabledPlugins.Remove(pluginId);
+                // 2. 添加到 pluginConfigModel.DisabledPlugins
+                pluginConfigModel.DisabledPlugins.Add(pluginId);
+                // 3.保存到 plugin.config.json
+                PluginConfigModelFactory.Save(pluginConfigModel);
+
+                responseData.code = 1;
+                responseData.message = "禁用成功";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -2;
+                responseData.message = "禁用失败: " + ex.Message;
+            }
 
             return await Task.FromResult(responseData);
         }

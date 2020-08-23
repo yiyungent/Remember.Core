@@ -26,7 +26,7 @@ namespace Framework.Plugins
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 pluginInfoModel = JsonSerializer.Deserialize<PluginInfoModelWrapper>(pluginInfoJsonStr, jsonSerializerOptions);
-                pluginInfoModel.PluginID = PluginPathProvider.GetPluginFolderNameByDir(pluginDir);
+                pluginInfoModel.PluginId = PluginPathProvider.GetPluginFolderNameByDir(pluginDir);
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace Framework.Plugins
 
     public class PluginInfoModelWrapper : PluginInfoModel
     {
-        public string PluginID { get; set; }
+        public string PluginId { get; set; }
 
         /// <summary>
         /// 插件状态
