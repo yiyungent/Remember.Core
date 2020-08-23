@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApi.Extensions;
 
 namespace WebApi
 {
@@ -43,8 +44,17 @@ namespace WebApi
         {
             (_engine, _remConfig) = services.ConfigureApplicationServices(_configuration, _webHostEnvironment);
 
-            // MVC
+            // MVC: Install 页面使用 Views
             services.AddControllersWithViews();
+
+            // 程序启动时 加载 已安装插件
+            services.AddPluginLoad();
+
+            // 开发环境下随便跨域
+            if (_webHostEnvironment.IsDevelopment())
+            {
+                services.AddCors(m => m.AddPolicy("Development", a => a.AllowAnyOrigin().AllowAnyHeader()));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +63,8 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                // 开发环境下随便跨域
+                app.UseCors("Development");
             }
 
             app.ConfigureRequestPipeline();

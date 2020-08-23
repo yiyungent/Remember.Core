@@ -30,25 +30,45 @@ namespace WebApi.Controllers.Admin
 
             // 获取所有插件信息
             IList<PluginInfoModelWrapper> pluginInfoModels = PluginInfoModelFactory.CreateAll();
+            // 添加插件状态
+            #region 添加插件状态信息
+            foreach (var model in pluginInfoModels)
+            {
+                if (pluginConfigModel.EnabledPlugins.Contains(model.PluginID))
+                {
+                    model.Status = PluginStatus.Enabled;
+                }
+                else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginID))
+                {
+                    model.Status = PluginStatus.Disabled;
+                }
+                else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginID))
+                {
+                    model.Status = PluginStatus.Uninstalled;
+                }
+            }
+            #endregion
+            #region 筛选插件状态
             switch (status.ToLower())
             {
                 case "all":
                     break;
                 case "installed":
-                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.EnabledPlugins.Contains(m.PluginID) || pluginConfigModel.DisabledPlugins.Contains(m.PluginID)).ToList();
+                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Enabled || m.Status == PluginStatus.Disabled).ToList();
                     break;
                 case "enabled":
-                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.EnabledPlugins.Contains(m.PluginID)).ToList();
+                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Enabled).ToList();
                     break;
                 case "disabled":
-                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.DisabledPlugins.Contains(m.PluginID)).ToList();
+                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Disabled).ToList();
                     break;
                 case "uninstalled":
-                    pluginInfoModels = pluginInfoModels.Where(m => pluginConfigModel.UninstalledPlugins.Contains(m.PluginID)).ToList();
+                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Uninstalled).ToList();
                     break;
                 default:
                     break;
             }
+            #endregion
 
             responseData.code = 1;
             responseData.message = "加载插件列表成功";
@@ -154,5 +174,73 @@ namespace WebApi.Controllers.Admin
         }
         #endregion
 
+        #region 上传插件
+        /// <summary>
+        /// 上传插件
+        /// </summary>
+        /// <param name="file">注意: 参数名一定为 file， 对应前端传过来时以 file 为名</param>
+        /// <returns></returns>
+        public async Task<ActionResult<ResponseData>> Upload([FromForm] IFormFile file)
+        {
+            ResponseData responseData = new ResponseData();
+
+            #region 效验
+            if (file == null)
+            {
+                responseData.code = -1;
+                responseData.message = "上传的文件不能为空";
+                return responseData;
+            }
+            //文件后缀
+            string fileExtension = Path.GetExtension(file.FileName);//获取文件格式，拓展名
+            if (fileExtension != ".zip")
+            {
+                responseData.code = -1;
+                responseData.message = "只能上传zip格式文件";
+                return responseData;
+            }
+            //判断文件大小
+            var fileSize = file.Length;
+            if (fileSize > 1024 * 1024 * 5) // 5M
+            {
+                responseData.code = -1;
+                responseData.message = "上传的文件不能大于5MB";
+                return responseData;
+            }
+            #endregion
+
+            try
+            {
+                // 1.上传到 Plugins 目录
+                //文件保存
+                string pluginsRootPath = PluginPathProvider.PluginsRootPath();
+                string pluginZipPath = Path.Combine(pluginsRootPath, file.FileName);
+                using (var fs = System.IO.File.Create(pluginZipPath))
+                {
+                    file.CopyTo(fs); //将上传的文件文件流，复制到fs中
+                    fs.Flush();//清空文件流
+                }
+                // 3.解压
+                bool isDecomparessSuccess = Core.Common.ZipHelper.DecomparessFile(pluginZipPath, pluginZipPath.Replace(".zip", ""));
+                // 4.删除原压缩包
+                System.IO.File.Delete(pluginZipPath);
+                // 5. 加入 PluginConfigModel.UninstalledPlugins
+                string pluginId = file.FileName.Replace(".zip", "");
+                PluginConfigModel pluginConfigModel = PluginConfigModelFactory.Create();
+                pluginConfigModel.UninstalledPlugins.Add(pluginId);
+                PluginConfigModelFactory.Save(pluginConfigModel);
+
+                responseData.code = 1;
+                responseData.message = "上传插件成功";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "上传插件失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
     }
 }

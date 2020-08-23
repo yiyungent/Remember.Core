@@ -6,6 +6,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
+using WebApi.Models.Common;
 
 namespace WebApi.Controllers
 {
@@ -28,11 +29,34 @@ namespace WebApi.Controllers
 
         #region Actions
 
+        [HttpGet]
         public async Task<ActionResult<UserInfo>> Get(int id)
         {
             UserInfo viewModel = await _userInfoService.FindAsync(m => m.ID == id && !m.IsDeleted);
 
             return Ok(viewModel);
+        }
+
+        [HttpGet(nameof(Info))]
+        public async Task<ActionResult<ResponseData>> Info()
+        {
+            ResponseData responseData = new ResponseData();
+            responseData.code = 1;
+            responseData.message = "获取成功";
+            responseData.data = new { name = "admin", avatar = "" };
+
+            return await Task.FromResult(responseData);
+        }
+
+        [HttpPost(nameof(Login))]
+        public async Task<ActionResult<ResponseData>> Login()
+        {
+            ResponseData responseData = new ResponseData();
+            responseData.code = 1;
+            responseData.message = "登陆成功";
+            responseData.data = new { token = "efrwnnrwt" };
+
+            return await Task.FromResult(responseData);
         }
 
         #endregion

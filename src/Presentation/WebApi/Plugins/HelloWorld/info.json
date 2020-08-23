@@ -1,0 +1,7 @@
+{
+	"DisplayName": "你好世界!",
+	"Description": "这是一个示例插件。",
+	"Author": "yiyun",
+	"Version": "0.1.0",
+	"SupportedVersions": [ "0.0.1" ]
+}

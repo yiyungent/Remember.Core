@@ -61,5 +61,17 @@ namespace Framework.Plugins
     public class PluginInfoModelWrapper : PluginInfoModel
     {
         public string PluginID { get; set; }
+
+        /// <summary>
+        /// 插件状态
+        /// </summary>
+        public PluginStatus Status { get; set; }
+    }
+
+    public enum PluginStatus
+    {
+        Enabled = 0,
+        Disabled = 1,
+        Uninstalled = 2
     }
 }
