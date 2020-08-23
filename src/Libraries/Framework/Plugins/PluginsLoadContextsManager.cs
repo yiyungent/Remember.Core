@@ -42,14 +42,22 @@ namespace Framework.Plugins
             //}
 
             // TODO: 跳过不需要加载的 dll, eg: ASP.NET Core Shared Framework, 主程序中已有dll
+            string[] skipDlls = new string[] { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll" };
 
             #region 加载插件引用的dll
             // 加载插件引用的dll
             // eg: xxx/Plugins/HelloWorld
             string pluginDirPath = Path.Combine(PluginPathProvider.PluginsRootPath(), pluginId);
             var pluginDir = new DirectoryInfo(pluginDirPath);
-            // 插件引用的所有dll (排除主dll)
-            var allReferenceFileInfos = pluginDir.GetFiles("*.dll").Where(p => p.Name != $"{pluginId}.dll");
+            // 插件引用的所有dll (排除 主dll 和 skipDlls )
+            // 注意: 主程序中已有dll 必须跳过, 应为这些默认Context中已经加载, 而如果插件Context再次加载, 则认为这两个是不同Assembly, 导致其中的Type转换失败
+            // 这里简单来说，意思就是当在一个自定义LoadContext中加载程序集的时候，如果找不到这个程序集，程序会自动去默认LoadContext中查找，如果默认LoadContext中都找不到，就会返回null。
+            // 这里我突然想到会不会是因为DemoPlugin1、DemoPlugin2以及主站点的AssemblyLoadContext都加载了Mystique.Core.dll程序集的缘故，虽然他们加载的是同一个程序集，但是因为LoadContext不同，所以系统认为它是2个程序集。
+            // 参考： https://www.cnblogs.com/lwqlun/p/12930713.html
+            var allReferenceFileInfos = pluginDir.GetFiles("*.dll").Where(p =>
+            p.Name != $"{pluginId}.dll"
+            &&
+            !skipDlls.Contains(p.Name));
             foreach (FileInfo file in allReferenceFileInfos)
             {
                 using (var sr = new StreamReader(file.OpenRead()))
@@ -60,12 +68,12 @@ namespace Framework.Plugins
             #endregion
 
             // 这个插件加载上下文 放入 集合中
-            PluginsLoadContexts.AddPluginContext(pluginId, context);
+            PluginsLoadContexts.Add(pluginId, context);
         }
 
         public static void UnloadPlugin(string pluginId)
         {
-            PluginsLoadContexts.RemovePluginContext(pluginId);
+            PluginsLoadContexts.Remove(pluginId);
         }
     }
 }

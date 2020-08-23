@@ -262,13 +262,5 @@ paket-files/
 __pycache__/
 *.pyc
 
-/src/Presentation/WebUI/Properties/PublishProfiles
-/src/Presentation/WebUI/App_Data/Plugins
-/src/Presentation/WebUI/App_Data/Logs
-/src/Presentation/WebUI/App_Data/LuceneDir
-/src/Presentation/WebUI/WebUI.zip
-/src/Presentation/WebUI/Upload/videos
-/src/Presentation/WebApi/Upload/videos
-/src/Presentation/WebUI/Upload
-/src/Presentation/WebUI/Upload/images/avatars
-/src/Presentation/WebUI/Templates
+
+/src/Presentation/WebApi/Plugins

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Framework.Plugins
@@ -22,16 +23,21 @@ namespace Framework.Plugins
         static PluginsLoadContexts()
         {
             _pluginContexts = new Dictionary<string, CollectibleAssemblyLoadContext>();
-        } 
+        }
         #endregion
 
         #region Methods
+        public static List<CollectibleAssemblyLoadContext> All()
+        {
+            return _pluginContexts.Select(p => p.Value).ToList();
+        }
+
         public static bool Any(string pluginId)
         {
             return _pluginContexts.ContainsKey(pluginId);
         }
 
-        public static void RemovePluginContext(string pluginId)
+        public static void Remove(string pluginId)
         {
             if (_pluginContexts.ContainsKey(pluginId))
             {
@@ -40,12 +46,12 @@ namespace Framework.Plugins
             }
         }
 
-        public static CollectibleAssemblyLoadContext GetContext(string pluginId)
+        public static CollectibleAssemblyLoadContext Get(string pluginId)
         {
             return _pluginContexts[pluginId];
         }
 
-        public static void AddPluginContext(string pluginId,
+        public static void Add(string pluginId,
              CollectibleAssemblyLoadContext context)
         {
             _pluginContexts.Add(pluginId, context);
