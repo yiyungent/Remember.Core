@@ -47,7 +47,7 @@ namespace WebApi
             // MVC: Install 页面使用 Views
             services.AddControllersWithViews();
 
-            // 程序启动时 加载 已安装插件
+            // 程序启动时 加载 已启用插件
             services.AddPluginLoad();
 
             // 开发环境下随便跨域

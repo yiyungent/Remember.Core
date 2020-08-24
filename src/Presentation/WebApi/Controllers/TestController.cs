@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         public ActionResult Get()
         {
             
-            var plugins = PluginFinder.EnablePlugins<BasePlugin>().ToList();
+            //var plugins = PluginFinder.EnablePlugins<BasePlugin>().ToList();
             var plugins2 = PluginFinder.EnablePlugins<ITestPlugin>().ToList();
 
             foreach (var item in plugins2)

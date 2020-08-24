@@ -23,10 +23,10 @@ namespace WebApi.Extensions
             PluginConfigModel pluginConfigModel = PluginConfigModelFactory.Create();
             #endregion
 
-            // 已安装插件 = 已启用的插件 + 已禁用的插件
-            #region 加载 已安装插件的Assembly
-            IList<string> installedPluginIds = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins).ToList();
-            foreach (var pluginId in installedPluginIds)
+            // 已启用的插件
+            #region 加载 已启用插件的Assemblies
+            IList<string> enabledPluginIds = pluginConfigModel.EnabledPlugins;
+            foreach (var pluginId in enabledPluginIds)
             {
                 PluginsLoadContextsManager.LoadPlugin(pluginId);
             }
