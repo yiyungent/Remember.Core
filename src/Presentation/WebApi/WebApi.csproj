@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="App_Data\TempUpload\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Plugins\" />
   </ItemGroup>
 

@@ -7,13 +7,13 @@ using Core;
 using Core.Configuration;
 using Core.Infrastructure;
 using Framework.Infrastructure.Extensions;
+using Framework.Plugins.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApi.Extensions;
 
 namespace WebApi
 {
@@ -47,8 +47,8 @@ namespace WebApi
             // MVC: Install 页面使用 Views
             services.AddControllersWithViews();
 
-            // 程序启动时 加载 已启用插件
-            services.AddPluginLoad();
+            // 添加插件框架
+            services.AddPluginFramework();
 
             // 开发环境下随便跨域
             if (_webHostEnvironment.IsDevelopment())

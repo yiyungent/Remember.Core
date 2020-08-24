@@ -15,7 +15,14 @@ namespace WebApi.Controllers.Admin
     [ApiController]
     public class PluginsController : ControllerBase
     {
+        private readonly PluginManager _pluginManager;
 
+        #region Ctor
+        public PluginsController(PluginManager pluginManager)
+        {
+            _pluginManager = pluginManager;
+        }
+        #endregion
 
         #region 插件列表
         /// <summary>
@@ -219,7 +226,7 @@ namespace WebApi.Controllers.Admin
             try
             {
                 // 1. 创建插件程序集加载上下文, 添加到 PluginsLoadContexts
-                PluginsLoadContextsManager.LoadPlugin(pluginId);
+                _pluginManager.LoadPlugin(pluginId);
                 // 2.从 pluginConfigModel.DisabledPlugins 移除
                 pluginConfigModel.DisabledPlugins.Remove(pluginId);
                 // 3. 添加到 pluginConfigModel.EnabledPlugins
@@ -240,7 +247,7 @@ namespace WebApi.Controllers.Admin
                 if (!pluginEnableResult.IsSuccess)
                 {
                     // 7.启用不成功, 回滚插件状态: (1)释放插件上下文 (2)更新 plugin.config.json
-                    PluginsLoadContextsManager.UnloadPlugin(pluginId);
+                    _pluginManager.UnloadPlugin(pluginId);
                     // 从 pluginConfigModel.EnabledPlugins 移除
                     pluginConfigModel.EnabledPlugins.Remove(pluginId);
                     // 添加到 pluginConfigModel.DisabledPlugins
@@ -302,7 +309,7 @@ namespace WebApi.Controllers.Admin
                         return await Task.FromResult(responseData);
                     }
                     // 3.移除插件对应的程序集加载上下文
-                    PluginsLoadContextsManager.UnloadPlugin(pluginId);
+                    _pluginManager.UnloadPlugin(pluginId);
                     // 4.从 pluginConfigModel.EnabledPlugins 移除
                     pluginConfigModel.EnabledPlugins.Remove(pluginId);
                     // 5. 添加到 pluginConfigModel.DisabledPlugins
