@@ -28,11 +28,15 @@
 
 ## 相关项目
 
-- [remember](https://github.com/yiyungent/remember)
+- [remember-default-admin-theme](https://github.com/yiyungent/remember-default-admin-theme)
 - [remember-app](https://github.com/yiyungent/remember-app)
+- [remember-uni-app](https://github.com/yiyungent/remember-uni-app)
+- [remember](https://github.com/yiyungent/remember)
+
 
 ## 鸣谢
 
+- 插件系统设计参考自 <a href="https://github.com/lamondlu/Mystique" target="_blank">Mystique</a>，感谢作者 lamondlu 的贡献
 - 设计参考自 <a href="https://github.com/lampo1024/TsBlog" target="_blank">TsBlog</a>，感谢作者 lampo1024 的贡献
 - 设计参考自 <a href="https://github.com/nopSolutions/nopCommerce" target="_blank">nopCommerce</a>，感谢作者 nopSolutions 的贡献
 - 设计参考自 <a href="https://github.com/anjoy8/Blog.Core" target="_blank">Blog.Core</a>，感谢作者 anjoy8 的贡献
