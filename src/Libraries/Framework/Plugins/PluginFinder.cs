@@ -3,12 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Framework.Plugins
 {
+    /// <summary>
+    /// 插件发现者: 找启用的插件(1.plugin.config.json中启用 2. 有插件上下文)
+    /// TODO: 其实是没必要再效验plugin.config.json的，因为只有启用的插件才有上下文, 为了保险，暂时这么做
+    /// 注意: 这意味着一个启用的插件需同时满足这两个条件
+    /// </summary>
     public class PluginFinder
     {
+
+
+        #region 实现了指定接口或类型 的启用插件
         /// <summary>
         /// 实现了指定接口或类型 的启用插件
         /// </summary>
@@ -63,5 +72,82 @@ namespace Framework.Plugins
             }
 
         }
+        #endregion
+
+        #region 所有启用的插件
+        /// <summary>
+        /// 所有启用的插件
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<IPlugin> EnablePlugins()
+        {
+            return EnablePlugins<IPlugin>();
+        }
+        #endregion
+
+        #region 获取指定 pluginId 的启用插件
+        /// <summary>
+        /// 获取指定 pluginId 的启用插件
+        /// </summary>
+        /// <param name="pluginId"></param>
+        /// <returns>1.插件未启用返回null, 2.找不到此插件上下文返回null 3.找不到插件主dll返回null 4.插件主dll中找不到实现了IPlugin的Type返回null, 5.无法实例化插件返回null</returns>
+        public static IPlugin Plugin(string pluginId)
+        {
+            // 1.所有启用的插件 PluginId
+            var pluginConfigModel = PluginConfigModelFactory.Create();
+            IList<string> enablePluginIds = pluginConfigModel.EnabledPlugins;
+            // 插件未启用返回null
+            if (!enablePluginIds.Contains(pluginId))
+            {
+                return null;
+            }
+
+            // 找不到此插件上下文返回null
+            if (!PluginsLoadContexts.Any(pluginId))
+            {
+                return null;
+            }
+
+            // 2.找到插件对应的Context
+            var context = PluginsLoadContexts.Get(pluginId);
+            // 3.找插件 主 Assembly
+            // Assembly.FullName: HelloWorld, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            Assembly pluginMainAssembly = context.Assemblies.Where(m => m.FullName.StartsWith($"{pluginId}, Version=")).FirstOrDefault();
+            // 找不到插件主dll返回null
+            if (pluginMainAssembly == null)
+            {
+                return null;
+            }
+            // 4.从插件主Assembly中 找实现了 TPlugin 接口的 Type, 若有多个，只要一个
+            Type pluginType = pluginMainAssembly.ExportedTypes.Where(m =>
+                (m.BaseType == typeof(IPlugin) || m.GetInterfaces().Contains(typeof(IPlugin)))
+                &&
+                !m.IsInterface
+                &&
+                !m.IsAbstract
+            ).FirstOrDefault();
+            // 插件主dll中找不到实现了IPlugin的Type返回null
+            if (pluginType == null)
+            {
+                return null;
+            }
+            // 5.实例化插件 Type
+            //(TPlugin)Activator.CreateInstance(pluginType,);
+            //try to resolve plugin as unregistered service
+            object instance = EngineContext.Current.ResolveUnregistered(pluginType);
+            //try to get typed instance
+            IPlugin typedInstance = (IPlugin)instance;
+            // 无法实例化插件返回null
+            if (typedInstance == null)
+            {
+                return null;
+            }
+
+            return typedInstance;
+        }
+        #endregion
+
+
+
     }
 }

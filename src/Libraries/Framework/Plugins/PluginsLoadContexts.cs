@@ -6,6 +6,8 @@ using System.Text;
 namespace Framework.Plugins
 {
     /// <summary>
+    /// <para>启用插件时加载进来, 禁用插件时移除释放</para>
+    /// <para>只有已启用的插件才有上下文</para>
     /// https://www.cnblogs.com/lwqlun/p/11395828.html
     /// 1.当加载插件的时候，我们需要将当前插件的程序集加载上下文放到_pluginContexts字典中。字典的key是插件的名称，字典的value是插件的程序集加载上下文。
     /// 2.当移除一个插件的时候，我们需要使用Unload方法，来释放当前的程序集加载上下文。

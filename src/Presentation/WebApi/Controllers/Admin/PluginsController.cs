@@ -95,12 +95,10 @@ namespace WebApi.Controllers.Admin
 
             try
             {
-                // 1. 创建插件程序集加载上下文, 添加到 PluginsLoadContexts
-                PluginsLoadContextsManager.LoadPlugin(pluginId);
-                // 2. 从 pluginConfigModel.UninstalledPlugins 移除, 添加到 pluginConfigModel.DisabledPlugins
+                // 1. 从 pluginConfigModel.UninstalledPlugins 移除, 添加到 pluginConfigModel.DisabledPlugins
                 pluginConfigModel.UninstalledPlugins.Remove(pluginId);
                 pluginConfigModel.DisabledPlugins.Add(pluginId);
-                // 3.保存到 plugin.config.json
+                // 2.保存到 plugin.config.json
                 PluginConfigModelFactory.Save(pluginConfigModel);
 
                 responseData.code = 1;
@@ -183,12 +181,11 @@ namespace WebApi.Controllers.Admin
 
             try
             {
-                // 1.移除插件对应的程序集加载上下文
-                PluginsLoadContextsManager.UnloadPlugin(pluginId);
-                // 2.从 pluginConfigModel.DisabledPlugins 移除, 添加到 pluginConfigModel.UninstalledPlugins
+                // PS:卸载插件必须先禁用插件，所以此时插件LoadContext已被移除释放(插件Assemblies已被释放), 此处不需移除LoadContext
+                // 1.从 pluginConfigModel.DisabledPlugins 移除, 添加到 pluginConfigModel.UninstalledPlugins
                 pluginConfigModel.DisabledPlugins.Remove(pluginId);
                 pluginConfigModel.UninstalledPlugins.Add(pluginId);
-                // 3.保存到 plugin.config.json
+                // 2.保存到 plugin.config.json
                 PluginConfigModelFactory.Save(pluginConfigModel);
 
                 responseData.code = 1;
@@ -221,12 +218,40 @@ namespace WebApi.Controllers.Admin
 
             try
             {
-                // 1.从 pluginConfigModel.DisabledPlugins 移除
+                // 1. 创建插件程序集加载上下文, 添加到 PluginsLoadContexts
+                PluginsLoadContextsManager.LoadPlugin(pluginId);
+                // 2.从 pluginConfigModel.DisabledPlugins 移除
                 pluginConfigModel.DisabledPlugins.Remove(pluginId);
-                // 2. 添加到 pluginConfigModel.EnabledPlugins
+                // 3. 添加到 pluginConfigModel.EnabledPlugins
                 pluginConfigModel.EnabledPlugins.Add(pluginId);
-                // 3.保存到 plugin.config.json
+                // 4.保存到 plugin.config.json
                 PluginConfigModelFactory.Save(pluginConfigModel);
+
+                // 5. 找到此插件实例
+                IPlugin plugin = PluginFinder.Plugin(pluginId);
+                if (plugin == null)
+                {
+                    responseData.code = -1;
+                    responseData.message = "启用失败: 此插件不存在, 或未安装";
+                    return await Task.FromResult(responseData);
+                }
+                // 6.调取插件的 AfterEnable(), 插件开发者可在此回收资源
+                var pluginEnableResult = plugin.AfterEnable();
+                if (!pluginEnableResult.IsSuccess)
+                {
+                    // 7.启用不成功, 回滚插件状态: (1)释放插件上下文 (2)更新 plugin.config.json
+                    PluginsLoadContextsManager.UnloadPlugin(pluginId);
+                    // 从 pluginConfigModel.EnabledPlugins 移除
+                    pluginConfigModel.EnabledPlugins.Remove(pluginId);
+                    // 添加到 pluginConfigModel.DisabledPlugins
+                    pluginConfigModel.DisabledPlugins.Add(pluginId);
+                    // 保存到 plugin.config.json
+                    PluginConfigModelFactory.Save(pluginConfigModel);
+
+                    responseData.code = -1;
+                    responseData.message = "启用失败: 来自插件的错误信息: " + pluginEnableResult.Message;
+                    return await Task.FromResult(responseData);
+                }
 
                 responseData.code = 1;
                 responseData.message = "启用成功";
@@ -258,12 +283,40 @@ namespace WebApi.Controllers.Admin
 
             try
             {
-                // 1.从 pluginConfigModel.EnabledPlugins 移除
-                pluginConfigModel.EnabledPlugins.Remove(pluginId);
-                // 2. 添加到 pluginConfigModel.DisabledPlugins
-                pluginConfigModel.DisabledPlugins.Add(pluginId);
-                // 3.保存到 plugin.config.json
-                PluginConfigModelFactory.Save(pluginConfigModel);
+                // 1. 找到此插件实例
+                IPlugin plugin = PluginFinder.Plugin(pluginId);
+                if (plugin == null)
+                {
+                    responseData.code = -1;
+                    responseData.message = "禁用失败: 此插件不存在, 或未启用";
+                    return await Task.FromResult(responseData);
+                }
+                try
+                {
+                    // 2.调取插件的 BeforeDisable(), 插件开发者可在此回收资源
+                    var pluginDisableResult = plugin.BeforeDisable();
+                    if (!pluginDisableResult.IsSuccess)
+                    {
+                        responseData.code = -1;
+                        responseData.message = "禁用失败: 来自插件的错误信息: " + pluginDisableResult.Message;
+                        return await Task.FromResult(responseData);
+                    }
+                    // 3.移除插件对应的程序集加载上下文
+                    PluginsLoadContextsManager.UnloadPlugin(pluginId);
+                    // 4.从 pluginConfigModel.EnabledPlugins 移除
+                    pluginConfigModel.EnabledPlugins.Remove(pluginId);
+                    // 5. 添加到 pluginConfigModel.DisabledPlugins
+                    pluginConfigModel.DisabledPlugins.Add(pluginId);
+                    // 6.保存到 plugin.config.json
+                    PluginConfigModelFactory.Save(pluginConfigModel);
+                }
+                catch (Exception ex)
+                {
+                    responseData.code = -1;
+                    responseData.message = "禁用失败: 此插件不存在, 或未启用";
+                    return await Task.FromResult(responseData);
+                }
+
 
                 responseData.code = 1;
                 responseData.message = "禁用成功";
