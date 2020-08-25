@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Models.Article
 {
-    public class ArticleDTO
+    public class ArticleResponseModel
     {
         public ArticleItem Article { get; set; }
 

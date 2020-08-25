@@ -24,15 +24,17 @@ namespace WebApi.Controllers.Admin
         }
         #endregion
 
+        #region Actions
+
         #region 插件列表
         /// <summary>
         /// 加载插件列表
         /// </summary>
         /// <param name="status">插件状态</param>
         /// <returns></returns>
-        public async Task<ActionResult<ResponseData>> List(string status = "all")
+        public async Task<ActionResult<ResponseModel>> List(string status = "all")
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             var pluginConfigModel = PluginConfigModelFactory.Create();
 
             // 获取所有插件信息
@@ -86,9 +88,9 @@ namespace WebApi.Controllers.Admin
         #endregion
 
         #region 安装插件
-        public async Task<ActionResult<ResponseData>> Install(string pluginId)
+        public async Task<ActionResult<ResponseModel>> Install(string pluginId)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             PluginConfigModel pluginConfigModel = PluginConfigModelFactory.Create();
             // TODO: 效验
             #region 效验
@@ -123,9 +125,9 @@ namespace WebApi.Controllers.Admin
         #endregion
 
         #region 删除插件
-        public async Task<ActionResult<ResponseData>> Delete(string pluginId)
+        public async Task<ActionResult<ResponseModel>> Delete(string pluginId)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             var pluginConfigModel = PluginConfigModelFactory.Create();
             // 效验是否存在于 已卸载插件列表
             if (!pluginConfigModel.UninstalledPlugins.Contains(pluginId))
@@ -160,9 +162,9 @@ namespace WebApi.Controllers.Admin
         #endregion
 
         #region 卸载插件
-        public async Task<ActionResult<ResponseData>> Uninstall(string pluginId)
+        public async Task<ActionResult<ResponseModel>> Uninstall(string pluginId)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             var pluginConfigModel = PluginConfigModelFactory.Create();
             // 卸载插件 必须 先禁用插件
             #region 效验
@@ -209,9 +211,9 @@ namespace WebApi.Controllers.Admin
         #endregion
 
         #region 启用插件
-        public async Task<ActionResult<ResponseData>> Enable(string pluginId)
+        public async Task<ActionResult<ResponseModel>> Enable(string pluginId)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             var pluginConfigModel = PluginConfigModelFactory.Create();
             // 效验是否存在于 已禁用插件列表
             #region 效验
@@ -274,9 +276,9 @@ namespace WebApi.Controllers.Admin
         #endregion
 
         #region 禁用插件
-        public async Task<ActionResult<ResponseData>> Disable(string pluginId)
+        public async Task<ActionResult<ResponseModel>> Disable(string pluginId)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             var pluginConfigModel = PluginConfigModelFactory.Create();
             // 效验是否存在于 已启用插件列表
             #region 效验
@@ -344,9 +346,9 @@ namespace WebApi.Controllers.Admin
         /// </summary>
         /// <param name="file">注意: 参数名一定为 file， 对应前端传过来时以 file 为名</param>
         /// <returns></returns>
-        public async Task<ActionResult<ResponseData>> Upload([FromForm] IFormFile file)
+        public async Task<ActionResult<ResponseModel>> Upload([FromForm] IFormFile file)
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
 
             #region 效验
             if (file == null)
@@ -405,6 +407,8 @@ namespace WebApi.Controllers.Admin
 
             return await Task.FromResult(responseData);
         }
+        #endregion 
+
         #endregion
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApi.Models.Common
 {
-    public class ResponseData 
+    public class ResponseModel 
     {
         public int code { get; set; }
 

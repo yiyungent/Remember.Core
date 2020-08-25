@@ -32,12 +32,12 @@ namespace WebApi.Controllers
         #region Actions
 
         [HttpGet, Route(nameof(Last))]
-        public async Task<ActionResult<ResponseData>> Last(int number)
+        public async Task<ActionResult<ResponseModel>> Last(int number)
         {
-            ResponseData responseData = null;
+            ResponseModel responseData = null;
             try
             {
-                IList<ArticleDTO> viewModel = new List<ArticleDTO>();
+                IList<ArticleResponseModel> viewModel = new List<ArticleResponseModel>();
                 IList<Article> articles = new List<Article>();
                 var e = await this._articleService.FilterAsync<DateTime>(1, number, m => !m.IsDeleted, m => m.CreateTime, false);
                 articles = e.Data.ToList();
@@ -47,13 +47,13 @@ namespace WebApi.Controllers
                 {
                     Article article = articles[i];
 
-                    viewModel.Add(new ArticleDTO
+                    viewModel.Add(new ArticleResponseModel
                     {
-                        Article = new ArticleDTO.ArticleItem
+                        Article = new ArticleResponseModel.ArticleItem
                         {
                             ID = article.ID,
                             CreateTime = article.CreateTime.ToTimeStamp13(),
-                            Author = new ArticleDTO.Author
+                            Author = new ArticleResponseModel.Author
                             {
                                 ID = article.Author.ID,
                                 Avatar = article.Author.Avatar/*.ToHttpAbsoluteUrl()*/,
@@ -69,7 +69,7 @@ namespace WebApi.Controllers
                 }
 
 
-                responseData = new ResponseData
+                responseData = new ResponseModel
                 {
                     code = 1,
                     message = "成功获取最新文章",
@@ -78,7 +78,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                responseData = new ResponseData
+                responseData = new ResponseModel
                 {
                     code = -1,
                     message = "获取最新文章失败 " + ex.Message + " " + ex.InnerException?.Message
@@ -89,12 +89,12 @@ namespace WebApi.Controllers
         }
 
         [HttpGet, Route(nameof(Hot))]
-        public async Task<ActionResult<ResponseData>> Hot(int number)
+        public async Task<ActionResult<ResponseModel>> Hot(int number)
         {
-            ResponseData responseData = null;
+            ResponseModel responseData = null;
             try
             {
-                IList<ArticleDTO> viewModel = new List<ArticleDTO>();
+                IList<ArticleResponseModel> viewModel = new List<ArticleResponseModel>();
                 IList<Article> articles = new List<Article>();
 
                 var e = await this._articleService.FilterAsync<int>(1, number, m => !m.IsDeleted, m => m.LikeNum, false);
@@ -105,13 +105,13 @@ namespace WebApi.Controllers
                 {
                     Article article = articles[i];
 
-                    viewModel.Add(new ArticleDTO
+                    viewModel.Add(new ArticleResponseModel
                     {
-                        Article = new ArticleDTO.ArticleItem
+                        Article = new ArticleResponseModel.ArticleItem
                         {
                             ID = article.ID,
                             CreateTime = article.CreateTime.ToTimeStamp13(),
-                            Author = new ArticleDTO.Author
+                            Author = new ArticleResponseModel.Author
                             {
                                 ID = article.Author.ID,
                                 Avatar = article.Author.Avatar/*.ToHttpAbsoluteUrl()*/,
@@ -127,7 +127,7 @@ namespace WebApi.Controllers
                 }
 
 
-                responseData = new ResponseData
+                responseData = new ResponseModel
                 {
                     code = 1,
                     message = "成功获取最热文章",
@@ -136,7 +136,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                responseData = new ResponseData
+                responseData = new ResponseModel
                 {
                     code = -1,
                     message = "获取最热文章失败 " + ex.Message + " " + ex.InnerException?.Message

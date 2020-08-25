@@ -38,9 +38,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(nameof(Info))]
-        public async Task<ActionResult<ResponseData>> Info()
+        public async Task<ActionResult<ResponseModel>> Info()
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             responseData.code = 1;
             responseData.message = "获取成功";
             responseData.data = new { name = "admin", avatar = "" };
@@ -49,9 +49,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost(nameof(Login))]
-        public async Task<ActionResult<ResponseData>> Login()
+        public async Task<ActionResult<ResponseModel>> Login()
         {
-            ResponseData responseData = new ResponseData();
+            ResponseModel responseData = new ResponseModel();
             responseData.code = 1;
             responseData.message = "登陆成功";
             responseData.data = new { token = "efrwnnrwt" };
