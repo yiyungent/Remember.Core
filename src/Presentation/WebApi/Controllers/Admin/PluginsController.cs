@@ -400,12 +400,21 @@ namespace WebApi.Controllers.Admin
                 bool isDecomparessSuccess = Core.Common.ZipHelper.DecomparessFile(tempZipFilePath, tempZipFilePath.Replace(".zip", ""));
                 // 3.删除原压缩包
                 System.IO.File.Delete(tempZipFilePath);
+                if (!isDecomparessSuccess)
+                {
+                    responseData.code = -1;
+                    responseData.message = "解压插件压缩包失败";
+                    return responseData;
+                }
                 // 4.读取其中的info.json, 获取 PluginId 值
                 PluginInfoModel pluginInfoModel = PluginInfoModelFactory.ReadPluginDir(tempZipFilePath.Replace(".zip", ""));
                 if (pluginInfoModel == null || string.IsNullOrEmpty(pluginInfoModel.PluginId))
                 {
+                    // 记得删除已不再需要的临时插件文件夹
+                    Directory.Delete(tempZipFilePath.Replace(".zip", ""), true);
+
                     responseData.code = -1;
-                    responseData.message = "错误的插件包";
+                    responseData.message = "不合法的插件";
                     return responseData;
                 }
                 string pluginId = pluginInfoModel.PluginId;
