@@ -4,7 +4,9 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Common;
 using Framework.Plugins;
+using Framework.Plugins.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models.Common;
@@ -38,23 +40,33 @@ namespace WebApi.Controllers.Admin
             var pluginConfigModel = PluginConfigModelFactory.Create();
 
             // 获取所有插件信息
-            IList<PluginInfoModelWrapper> pluginInfoModels = PluginInfoModelFactory.CreateAll();
+            IList<PluginInfoModel> pluginInfoModels = PluginInfoModelFactory.CreateAll();
+            IList<PluginInfoResponseModel> responseModels = new List<PluginInfoResponseModel>();
             // 添加插件状态
             #region 添加插件状态信息
             foreach (var model in pluginInfoModels)
             {
+                PluginInfoResponseModel responseModel = new PluginInfoResponseModel();
+                responseModel.Author = model.Author;
+                responseModel.Description = model.Description;
+                responseModel.DisplayName = model.DisplayName;
+                responseModel.PluginId = model.PluginId;
+                responseModel.SupportedVersions = model.SupportedVersions;
+                responseModel.Version = model.Version;
+
                 if (pluginConfigModel.EnabledPlugins.Contains(model.PluginId))
                 {
-                    model.Status = PluginStatus.Enabled;
+                    responseModel.Status = PluginStatus.Enabled;
                 }
                 else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginId))
                 {
-                    model.Status = PluginStatus.Disabled;
+                    responseModel.Status = PluginStatus.Disabled;
                 }
                 else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginId))
                 {
-                    model.Status = PluginStatus.Uninstalled;
+                    responseModel.Status = PluginStatus.Uninstalled;
                 }
+                responseModels.Add(responseModel);
             }
             #endregion
             #region 筛选插件状态
@@ -63,16 +75,16 @@ namespace WebApi.Controllers.Admin
                 case "all":
                     break;
                 case "installed":
-                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Enabled || m.Status == PluginStatus.Disabled).ToList();
+                    responseModels = responseModels.Where(m => m.Status == PluginStatus.Enabled || m.Status == PluginStatus.Disabled).ToList();
                     break;
                 case "enabled":
-                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Enabled).ToList();
+                    responseModels = responseModels.Where(m => m.Status == PluginStatus.Enabled).ToList();
                     break;
                 case "disabled":
-                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Disabled).ToList();
+                    responseModels = responseModels.Where(m => m.Status == PluginStatus.Disabled).ToList();
                     break;
                 case "uninstalled":
-                    pluginInfoModels = pluginInfoModels.Where(m => m.Status == PluginStatus.Uninstalled).ToList();
+                    responseModels = responseModels.Where(m => m.Status == PluginStatus.Uninstalled).ToList();
                     break;
                 default:
                     break;
@@ -81,7 +93,7 @@ namespace WebApi.Controllers.Admin
 
             responseData.code = 1;
             responseData.message = "加载插件列表成功";
-            responseData.data = pluginInfoModels;
+            responseData.data = responseModels;
 
             return await Task.FromResult(responseData);
         }
@@ -377,27 +389,50 @@ namespace WebApi.Controllers.Admin
 
             try
             {
-                // 1.上传到 Plugins 目录
-                //文件保存
-                string pluginsRootPath = PluginPathProvider.PluginsRootPath();
-                string pluginZipPath = Path.Combine(pluginsRootPath, file.FileName);
-                using (var fs = System.IO.File.Create(pluginZipPath))
+                // 1.先上传到 临时插件上传目录, 用Guid.zip作为保存文件名
+                string tempZipFilePath = Path.Combine(PluginPathProvider.TempPluginUploadDir(), Guid.NewGuid() + ".zip");
+                using (var fs = System.IO.File.Create(tempZipFilePath))
                 {
                     file.CopyTo(fs); //将上传的文件文件流，复制到fs中
                     fs.Flush();//清空文件流
                 }
-                // 3.解压
-                bool isDecomparessSuccess = Core.Common.ZipHelper.DecomparessFile(pluginZipPath, pluginZipPath.Replace(".zip", ""));
-                // 4.删除原压缩包
-                System.IO.File.Delete(pluginZipPath);
-                // 5. 加入 PluginConfigModel.UninstalledPlugins
-                string pluginId = file.FileName.Replace(".zip", "");
-                PluginConfigModel pluginConfigModel = PluginConfigModelFactory.Create();
+                // 2.解压
+                bool isDecomparessSuccess = Core.Common.ZipHelper.DecomparessFile(tempZipFilePath, tempZipFilePath.Replace(".zip", ""));
+                // 3.删除原压缩包
+                System.IO.File.Delete(tempZipFilePath);
+                // 4.读取其中的info.json, 获取 PluginId 值
+                PluginInfoModel pluginInfoModel = PluginInfoModelFactory.ReadPluginDir(tempZipFilePath.Replace(".zip", ""));
+                if (pluginInfoModel == null || string.IsNullOrEmpty(pluginInfoModel.PluginId))
+                {
+                    responseData.code = -1;
+                    responseData.message = "错误的插件包";
+                    return responseData;
+                }
+                string pluginId = pluginInfoModel.PluginId;
+                // 5.检索 此 PluginId 是否本地插件已存在
+                var pluginConfigModel = PluginConfigModelFactory.Create();
+                // 本地已经存在的 PluginId
+                IList<string> localExistPluginIds = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins).Concat(pluginConfigModel.UninstalledPlugins).ToList();
+                if (localExistPluginIds.Contains(pluginId))
+                {
+                    // 记得删除已不再需要的临时插件文件夹
+                    Directory.Delete(tempZipFilePath.Replace(".zip", ""), true);
+
+                    responseData.code = -1;
+                    responseData.message = $"本地已有此插件 (PluginId: {pluginId}), 请前往插件列表删除后, 再上传";
+                    return responseData;
+                }
+                // 6.本地无此插件 -> 移动插件文件夹到 Plugins 下, 并以 PluginId 为插件文件夹名
+                string pluginsRootPath = PluginPathProvider.PluginsRootPath();
+                string newPluginDir = Path.Combine(pluginsRootPath, pluginId);
+                Directory.Move(tempZipFilePath.Replace(".zip", ""), newPluginDir);
+
+                // 7. 加入 PluginConfigModel.UninstalledPlugins
                 pluginConfigModel.UninstalledPlugins.Add(pluginId);
                 PluginConfigModelFactory.Save(pluginConfigModel);
 
                 responseData.code = 1;
-                responseData.message = "上传插件成功";
+                responseData.message = $"上传插件成功 (PluginId: {pluginId})";
             }
             catch (Exception ex)
             {

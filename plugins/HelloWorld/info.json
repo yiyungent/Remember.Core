@@ -1,4 +1,5 @@
 ﻿{
+	"PluginId": "HelloWorld",
 	"DisplayName": "你好世界!",
 	"Description": "这是一个示例插件。",
 	"Author": "yiyun",

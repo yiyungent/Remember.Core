@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Plugins
+namespace Framework.Plugins.Models
 {
     /// <summary>
     /// 所有插件的配置信息模型

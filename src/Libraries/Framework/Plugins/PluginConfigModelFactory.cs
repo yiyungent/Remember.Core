@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Framework.Plugins.Models;
 
 namespace Framework.Plugins
 {

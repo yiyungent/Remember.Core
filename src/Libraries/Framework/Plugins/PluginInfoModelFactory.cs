@@ -4,17 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using Framework.Plugins.Models;
 
 namespace Framework.Plugins
 {
     public class PluginInfoModelFactory
     {
+        private const string InfoJson = "info.json";
+
         #region 即时读取指定 plugin info.json
-        public static PluginInfoModelWrapper Create(string pluginId)
+        public static PluginInfoModel Create(string pluginId)
         {
-            PluginInfoModelWrapper pluginInfoModel = new PluginInfoModelWrapper();
+            PluginInfoModel pluginInfoModel = new PluginInfoModel();
             string pluginDir = Path.Combine(PluginPathProvider.PluginsRootPath(), pluginId);
-            string pluginInfoFilePath = Path.Combine(pluginDir, "info.json");
+            string pluginInfoFilePath = Path.Combine(pluginDir, InfoJson);
 
             if (!File.Exists(pluginInfoFilePath))
             {
@@ -25,8 +28,7 @@ namespace Framework.Plugins
                 string pluginInfoJsonStr = File.ReadAllText(pluginInfoFilePath, Encoding.UTF8);
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                pluginInfoModel = JsonSerializer.Deserialize<PluginInfoModelWrapper>(pluginInfoJsonStr, jsonSerializerOptions);
-                pluginInfoModel.PluginId = PluginPathProvider.GetPluginFolderNameByDir(pluginDir);
+                pluginInfoModel = JsonSerializer.Deserialize<PluginInfoModel>(pluginInfoJsonStr, jsonSerializerOptions);
             }
             catch (Exception ex)
             {
@@ -38,16 +40,16 @@ namespace Framework.Plugins
         #endregion
 
         #region 即时读取插件目录下所有 plugin info.json
-        public static IList<PluginInfoModelWrapper> CreateAll()
+        public static IList<PluginInfoModel> CreateAll()
         {
-            IList<PluginInfoModelWrapper> pluginInfoModels = new List<PluginInfoModelWrapper>();
+            IList<PluginInfoModel> pluginInfoModels = new List<PluginInfoModel>();
             IList<string> pluginDirs = PluginPathProvider.AllPluginDir();
             foreach (var dir in pluginDirs)
             {
                 // 从 dir 中解析出 pluginId
                 // 约定: 插件文件夹名=PluginID=插件主.dll
                 string pluginId = PluginPathProvider.GetPluginFolderNameByDir(dir);
-                PluginInfoModelWrapper model = Create(pluginId);
+                PluginInfoModel model = Create(pluginId);
                 pluginInfoModels.Add(model);
             }
             // 去除为 null: 目标插件信息不存在，或者格式错误的
@@ -56,22 +58,40 @@ namespace Framework.Plugins
             return pluginInfoModels;
         }
         #endregion
-    }
 
-    public class PluginInfoModelWrapper : PluginInfoModel
-    {
-        public string PluginId { get; set; }
-
+        #region 从指定插件目录读取插件信息
         /// <summary>
-        /// 插件状态
+        /// 从指定插件目录读取插件信息
+        /// 可以用于读取临时插件上传目录中的插件信息
         /// </summary>
-        public PluginStatus Status { get; set; }
+        /// <param name="pluginDir"></param>
+        /// <returns></returns>
+        public static PluginInfoModel ReadPluginDir(string pluginDir)
+        {
+            PluginInfoModel pluginInfoModel = new PluginInfoModel();
+            string pluginInfoFilePath = Path.Combine(pluginDir, InfoJson);
+
+            if (!File.Exists(pluginInfoFilePath))
+            {
+                return null;
+            }
+            try
+            {
+                string pluginInfoJsonStr = File.ReadAllText(pluginInfoFilePath, Encoding.UTF8);
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                pluginInfoModel = JsonSerializer.Deserialize<PluginInfoModel>(pluginInfoJsonStr, jsonSerializerOptions);
+            }
+            catch (Exception ex)
+            {
+                pluginInfoModel = null;
+            }
+
+            return pluginInfoModel;
+        }  
+        #endregion
+
     }
 
-    public enum PluginStatus
-    {
-        Enabled = 0,
-        Disabled = 1,
-        Uninstalled = 2
-    }
+    
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Plugins
+namespace Framework.Plugins.Models
 {
     /// <summary>
     /// 插件信息模型
@@ -16,6 +16,8 @@ namespace Framework.Plugins
     /// </summary>
     public class PluginInfoModel
     {
+        public string PluginId { get; set; }
+
         public string DisplayName { get; set; }
 
         public string Description { get; set; }

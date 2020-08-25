@@ -1,4 +1,5 @@
 ﻿{
+	"PluginId": "GetUserInfo",
 	"DisplayName": "获取一个用户",
 	"Description": "这是一个示例插件2号。",
 	"Author": "yiyun",

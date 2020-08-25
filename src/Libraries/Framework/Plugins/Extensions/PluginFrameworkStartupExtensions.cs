@@ -1,4 +1,5 @@
 ﻿using Framework.Plugins;
+using Framework.Plugins.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;

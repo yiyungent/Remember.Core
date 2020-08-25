@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Plugins
+namespace Framework.Plugins.Models
 {
     /// <summary>
     /// 插件设置模型

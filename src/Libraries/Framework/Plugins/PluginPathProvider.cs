@@ -7,6 +7,17 @@ namespace Framework.Plugins
     public class PluginPathProvider
     {
         /// <summary>
+        /// 临时插件上传目录路径
+        /// eg: F:\Com\me\Repos\Remember.Core\src\Presentation\WebApi\App_Data\TempPluginUpload
+        /// </summary>
+        /// <returns></returns>
+        public static string TempPluginUploadDir()
+        {
+            string tempPluginUploadDir = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "TempPluginUpload");
+            return tempPluginUploadDir;
+        }
+
+        /// <summary>
         /// 获取 Plugins 的路径
         /// </summary>
         /// <returns></returns>

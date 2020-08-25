@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App_Data\TempUpload\" />
+    <Folder Include="App_Data\TempPluginUpload\" />
     <Folder Include="Extensions\" />
     <Folder Include="Plugins\" />
   </ItemGroup>

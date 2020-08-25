@@ -6,8 +6,6 @@ namespace Framework.Plugins.Models
 {
     public class PluginRegistryResponseModel : PluginInfoModel
     {
-        public string PluginId { get; set; }
-
         public string DownloadUrl { get; set; }
 
         /// <summary>
