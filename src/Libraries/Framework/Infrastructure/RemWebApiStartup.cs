@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Core.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Repositories.Core;
 
 namespace Framework.Infrastructure
@@ -58,15 +60,42 @@ namespace Framework.Infrastructure
             #endregion
 
             services.AddControllers();
+
+            #region for UHub IdentityServer4
+            // accepts any access token issued by identity server
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        // 多长时间来验证以下 Token
+                        ClockSkew = TimeSpan.FromMinutes(5),
+                        // 我们要求 Token 需要有超时时间这个参数
+                        RequireExpirationTime = true
+                    };
+
+                    options.RequireHttpsMetadata = false;
+                });
+
+            // adds an authorization policy to make sure the token is for scope 'api1'
+            services.AddAuthorization();
+            #endregion
         }
 
-        public void Configure(IApplicationBuilder application)
+        public void Configure(IApplicationBuilder app)
         {
-            application.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-            application.UseRouting();
+            app.UseRouting();
 
-            application.UseEndpoints(endpoints =>
+            app.UseAuthentication();
+            // 需要授权: 为了保护 api 资源
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
