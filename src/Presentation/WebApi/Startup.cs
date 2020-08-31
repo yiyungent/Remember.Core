@@ -7,7 +7,7 @@ using Core;
 using Core.Configuration;
 using Core.Infrastructure;
 using Framework.Infrastructure.Extensions;
-using Framework.Plugins.Extensions;
+using PluginCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

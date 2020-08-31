@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     /// <summary>
     /// 目前采用的第一种方案

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     /// <summary>
     /// 一个可回收的程序集加载上下文

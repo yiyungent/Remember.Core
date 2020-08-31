@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using Framework.Plugins.Models;
+using PluginCore.Models;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     public class PluginInfoModelFactory
     {

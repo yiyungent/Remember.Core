@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     /// <summary>
     /// 一个插件的所有dll由 一个 <see cref="CollectibleAssemblyLoadContext"/> 管理
@@ -52,7 +52,7 @@ namespace Framework.Plugins
             //}
 
             // TODO: 跳过不需要加载的 dll, eg: ASP.NET Core Shared Framework, 主程序中已有dll
-            string[] skipDlls = new string[] { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll" };
+            string[] skipDlls = new string[] { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll", "PluginCore.dll" };
 
             #region 加载插件引用的dll
             // 加载插件引用的dll

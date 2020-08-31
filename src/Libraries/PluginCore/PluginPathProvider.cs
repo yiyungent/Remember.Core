@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     public class PluginPathProvider
     {

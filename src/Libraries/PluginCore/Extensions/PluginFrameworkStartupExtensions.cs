@@ -1,5 +1,4 @@
-﻿using Framework.Plugins;
-using Framework.Plugins.Models;
+﻿using PluginCore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Framework.Plugins.Extensions
+namespace PluginCore.Extensions
 {
     /// <summary>
     /// 

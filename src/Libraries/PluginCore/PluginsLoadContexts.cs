@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     /// <summary>
     /// <para>启用插件时加载进来, 禁用插件时移除释放</para>

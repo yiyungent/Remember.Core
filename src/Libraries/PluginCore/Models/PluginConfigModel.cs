@@ -1,9 +1,8 @@
-﻿using SQLitePCL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Plugins.Models
+namespace PluginCore.Models
 {
     /// <summary>
     /// 所有插件的配置信息模型

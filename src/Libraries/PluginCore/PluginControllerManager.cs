@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     public class PluginControllerManager
     {

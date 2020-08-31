@@ -10,6 +10,6 @@ namespace WebApi.Models.User
         /// <summary>
         /// AccessToken
         /// </summary>
-        public string Token { get; set;]}
+        public string Token { get; set;}
     }
 }

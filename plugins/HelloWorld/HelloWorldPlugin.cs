@@ -1,5 +1,5 @@
 ﻿using Framework.PluginApis;
-using Framework.Plugins;
+using PluginCore;
 using System;
 
 namespace HelloWorld

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Plugins.Models
+namespace PluginCore.Models
 {
     public class PluginInfoResponseModel : PluginInfoModel
     {

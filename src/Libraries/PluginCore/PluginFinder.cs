@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Framework.Plugins
+namespace PluginCore
 {
     /// <summary>
     /// 插件发现者: 找启用的插件(1.plugin.config.json中启用 2. 有插件上下文)

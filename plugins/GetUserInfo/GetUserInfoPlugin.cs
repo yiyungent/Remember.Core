@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Framework.PluginApis;
-using Framework.Plugins;
+using PluginCore;
 using Services.Interface;
 using System;
 using System.Text.Json;
