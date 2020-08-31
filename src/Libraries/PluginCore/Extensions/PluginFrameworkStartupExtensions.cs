@@ -25,6 +25,7 @@ namespace PluginCore.Extensions
             services.AddSingleton(PluginActionDescriptorChangeProvider.Instance);
             services.AddTransient<PluginControllerManager>();
             services.AddTransient<PluginManager>();
+            services.AddTransient<PluginFinder>();
 
             using (var serviceProvider = services.BuildServiceProvider())
             {

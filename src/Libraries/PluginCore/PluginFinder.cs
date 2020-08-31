@@ -1,10 +1,10 @@
-﻿using Core.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PluginCore
 {
@@ -15,7 +15,16 @@ namespace PluginCore
     /// </summary>
     public class PluginFinder
     {
+        #region Fields
+        private readonly IServiceProvider _serviceProvider;
+        #endregion
 
+        #region Ctor
+        public PluginFinder(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+        #endregion
 
         #region 实现了指定接口或类型 的启用插件
         /// <summary>
@@ -23,7 +32,7 @@ namespace PluginCore
         /// </summary>
         /// <typeparam name="TPlugin">可以是一个接口，一个抽象类，一个普通实现类, 只要实现了 <see cref="IPlugin"/>即可</typeparam>
         /// <returns></returns>
-        public static IEnumerable<TPlugin> EnablePlugins<TPlugin>()
+        public IEnumerable<TPlugin> EnablePlugins<TPlugin>()
             where TPlugin : IPlugin // BasePlugin
         {
             // TODO: 目前这里还有问题, 不应该写为 BasePlugin, 不利于扩展, 不利于插件开发者自己实现 Install , Uninstall等
@@ -59,7 +68,8 @@ namespace PluginCore
                     // 5.实例化插件 Type
                     //(TPlugin)Activator.CreateInstance(pluginType,);
                     //try to resolve plugin as unregistered service
-                    object instance = EngineContext.Current.ResolveUnregistered(pluginType);
+                    //object instance = EngineContext.Current.ResolveUnregistered(pluginType);
+                    object instance = ResolveUnregistered(pluginType);
                     //try to get typed instance
                     TPlugin typedInstance = (TPlugin)instance;
                     if (typedInstance == null)
@@ -79,7 +89,7 @@ namespace PluginCore
         /// 所有启用的插件
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<IPlugin> EnablePlugins()
+        public IEnumerable<IPlugin> EnablePlugins()
         {
             return EnablePlugins<IPlugin>();
         }
@@ -91,7 +101,7 @@ namespace PluginCore
         /// </summary>
         /// <param name="pluginId"></param>
         /// <returns>1.插件未启用返回null, 2.找不到此插件上下文返回null 3.找不到插件主dll返回null 4.插件主dll中找不到实现了IPlugin的Type返回null, 5.无法实例化插件返回null</returns>
-        public static IPlugin Plugin(string pluginId)
+        public IPlugin Plugin(string pluginId)
         {
             // 1.所有启用的插件 PluginId
             var pluginConfigModel = PluginConfigModelFactory.Create();
@@ -134,7 +144,8 @@ namespace PluginCore
             // 5.实例化插件 Type
             //(TPlugin)Activator.CreateInstance(pluginType,);
             //try to resolve plugin as unregistered service
-            object instance = EngineContext.Current.ResolveUnregistered(pluginType);
+            //object instance = EngineContext.Current.ResolveUnregistered(pluginType);
+            object instance = ResolveUnregistered(pluginType);
             //try to get typed instance
             IPlugin typedInstance = (IPlugin)instance;
             // 无法实例化插件返回null
@@ -147,7 +158,44 @@ namespace PluginCore
         }
         #endregion
 
+        #region 获取未IOC注册的类型实例
+        /// <summary>
+        /// 获取未IOC注册的类型实例
+        /// <para>此类型的构造函数可以依赖注入, 将通过ASP.NET Core 自带依赖注入系统进行注入</para>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected virtual object ResolveUnregistered(Type type)
+        {
 
+            Exception innerException = null;
+            foreach (var constructor in type.GetConstructors())
+            {
+                try
+                {
+                    //try to resolve constructor parameters
+                    var parameters = constructor.GetParameters().Select(parameter =>
+                    {
+                        //var service = Resolve(parameter.ParameterType);
+                        var service = _serviceProvider.GetService(parameter.ParameterType);
+                        if (service == null)
+                            throw new Exception("Unknown dependency");
+                        return service;
+                    });
+
+                    //all is ok, so create instance
+                    return Activator.CreateInstance(type, parameters.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    innerException = ex;
+                }
+            }
+
+            throw new Exception("No constructor was found that had all the dependencies satisfied.", innerException);
+
+        }
+        #endregion
 
     }
 }

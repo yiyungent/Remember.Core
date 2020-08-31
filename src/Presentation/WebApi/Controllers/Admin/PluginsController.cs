@@ -17,12 +17,16 @@ namespace WebApi.Controllers.Admin
     [ApiController]
     public class PluginsController : ControllerBase
     {
+        #region Fields
         private readonly PluginManager _pluginManager;
+        private readonly PluginFinder _pluginFinder;
+        #endregion
 
         #region Ctor
-        public PluginsController(PluginManager pluginManager)
+        public PluginsController(PluginManager pluginManager, PluginFinder pluginFinder)
         {
             _pluginManager = pluginManager;
+            _pluginFinder = pluginFinder;
         }
         #endregion
 
@@ -249,7 +253,7 @@ namespace WebApi.Controllers.Admin
                 PluginConfigModelFactory.Save(pluginConfigModel);
 
                 // 5. 找到此插件实例
-                IPlugin plugin = PluginFinder.Plugin(pluginId);
+                IPlugin plugin = _pluginFinder.Plugin(pluginId);
                 if (plugin == null)
                 {
                     responseData.code = -1;
@@ -305,7 +309,7 @@ namespace WebApi.Controllers.Admin
             try
             {
                 // 1. 找到此插件实例
-                IPlugin plugin = PluginFinder.Plugin(pluginId);
+                IPlugin plugin = _pluginFinder.Plugin(pluginId);
                 if (plugin == null)
                 {
                     responseData.code = -1;

@@ -15,17 +15,18 @@ namespace WebApi.Controllers
     public class TestController : ControllerBase
     {
         private IList<IActionDescriptorChangeProvider> _actionDescriptorChangeProviders;
+        private readonly PluginFinder _pluginFinder;
 
-        public TestController(IEnumerable<IActionDescriptorChangeProvider> actionDescriptorChangeProviders)
+        public TestController(IEnumerable<IActionDescriptorChangeProvider> actionDescriptorChangeProviders, PluginFinder pluginFinder)
         {
             _actionDescriptorChangeProviders = actionDescriptorChangeProviders.ToList();
+            _pluginFinder = pluginFinder;
         }
 
         public ActionResult Get()
         {
-
             //var plugins = PluginFinder.EnablePlugins<BasePlugin>().ToList();
-            var plugins2 = PluginFinder.EnablePlugins<ITestPlugin>().ToList();
+            var plugins2 = _pluginFinder.EnablePlugins<ITestPlugin>().ToList();
 
             foreach (var item in plugins2)
             {
