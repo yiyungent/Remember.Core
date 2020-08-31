@@ -47,32 +47,7 @@ namespace WebApi.Controllers.Admin
             IList<PluginInfoModel> pluginInfoModels = PluginInfoModelFactory.CreateAll();
             IList<PluginInfoResponseModel> responseModels = new List<PluginInfoResponseModel>();
             // 添加插件状态
-            #region 添加插件状态信息
-            foreach (var model in pluginInfoModels)
-            {
-                PluginInfoResponseModel responseModel = new PluginInfoResponseModel();
-                responseModel.Author = model.Author;
-                responseModel.Description = model.Description;
-                responseModel.DisplayName = model.DisplayName;
-                responseModel.PluginId = model.PluginId;
-                responseModel.SupportedVersions = model.SupportedVersions;
-                responseModel.Version = model.Version;
-
-                if (pluginConfigModel.EnabledPlugins.Contains(model.PluginId))
-                {
-                    responseModel.Status = PluginStatus.Enabled;
-                }
-                else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginId))
-                {
-                    responseModel.Status = PluginStatus.Disabled;
-                }
-                else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginId))
-                {
-                    responseModel.Status = PluginStatus.Uninstalled;
-                }
-                responseModels.Add(responseModel);
-            }
-            #endregion
+            responseModels = PluginInfoModelToResponseModel(pluginInfoModels, pluginConfigModel);
             #region 筛选插件状态
             switch (status.ToLower())
             {
@@ -455,7 +430,85 @@ namespace WebApi.Controllers.Admin
 
             return await Task.FromResult(responseData);
         }
-        #endregion 
+        #endregion
+
+        #region 查看详细
+        public async Task<ActionResult<ResponseModel>> Details(string pluginId)
+        {
+            ResponseModel responseData = new ResponseModel();
+
+            try
+            {
+                var pluginConfigModel = PluginConfigModelFactory.Create();
+                var allPluginConfigModels = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins)
+                        .Concat(pluginConfigModel.UninstalledPlugins).ToList();
+                #region 效验
+
+                if (!allPluginConfigModels.Contains(pluginId))
+                {
+                    responseData.code = -1;
+                    responseData.message = $"查看详细失败: 不存在 {pluginId} 插件";
+                    return await Task.FromResult(responseData);
+                }
+
+                #endregion
+
+                PluginInfoModel pluginInfoModel = PluginInfoModelFactory.Create(pluginId);
+                PluginInfoResponseModel pluginInfoResponseModel = PluginInfoModelToResponseModel(new List<PluginInfoModel>() { pluginInfoModel }, pluginConfigModel).FirstOrDefault();
+
+                
+                responseData.code = 1;
+                responseData.message = "查看详细成功";
+                responseData.data = pluginInfoResponseModel;
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "查看详细失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
+
+        #endregion
+
+
+        #region Helpers
+
+        [NonAction]
+        private IList<PluginInfoResponseModel> PluginInfoModelToResponseModel(IList<PluginInfoModel> pluginInfoModels, PluginConfigModel pluginConfigModel)
+        {
+            IList<PluginInfoResponseModel> responseModels = new List<PluginInfoResponseModel>();
+            #region 添加插件状态信息
+            foreach (var model in pluginInfoModels)
+            {
+                PluginInfoResponseModel responseModel = new PluginInfoResponseModel();
+                responseModel.Author = model.Author;
+                responseModel.Description = model.Description;
+                responseModel.DisplayName = model.DisplayName;
+                responseModel.PluginId = model.PluginId;
+                responseModel.SupportedVersions = model.SupportedVersions;
+                responseModel.Version = model.Version;
+
+                if (pluginConfigModel.EnabledPlugins.Contains(model.PluginId))
+                {
+                    responseModel.Status = PluginStatus.Enabled;
+                }
+                else if (pluginConfigModel.DisabledPlugins.Contains(model.PluginId))
+                {
+                    responseModel.Status = PluginStatus.Disabled;
+                }
+                else if (pluginConfigModel.UninstalledPlugins.Contains(model.PluginId))
+                {
+                    responseModel.Status = PluginStatus.Uninstalled;
+                }
+                responseModels.Add(responseModel);
+            }
+            #endregion
+
+            return responseModels;
+        }
 
         #endregion
     }
