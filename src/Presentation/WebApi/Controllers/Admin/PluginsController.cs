@@ -456,7 +456,7 @@ namespace WebApi.Controllers.Admin
                 PluginInfoModel pluginInfoModel = PluginInfoModelFactory.Create(pluginId);
                 PluginInfoResponseModel pluginInfoResponseModel = PluginInfoModelToResponseModel(new List<PluginInfoModel>() { pluginInfoModel }, pluginConfigModel).FirstOrDefault();
 
-                
+
                 responseData.code = 1;
                 responseData.message = "查看详细成功";
                 responseData.data = pluginInfoResponseModel;
@@ -465,6 +465,46 @@ namespace WebApi.Controllers.Admin
             {
                 responseData.code = -1;
                 responseData.message = "查看详细失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
+
+        #region 查看文档
+        public async Task<ActionResult<ResponseModel>> Readme(string pluginId)
+        {
+            ResponseModel responseData = new ResponseModel();
+
+            try
+            {
+                var pluginConfigModel = PluginConfigModelFactory.Create();
+                var allPluginConfigModels = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins)
+                    .Concat(pluginConfigModel.UninstalledPlugins).ToList();
+                #region 效验
+
+                if (!allPluginConfigModels.Contains(pluginId))
+                {
+                    responseData.code = -1;
+                    responseData.message = $"查看文档失败: 不存在 {pluginId} 插件";
+                    return await Task.FromResult(responseData);
+                }
+
+                #endregion
+
+                PluginReadmeModel readmeModel = PluginReadmeModelFactory.Create(pluginId);
+                PluginReadmeResponseModel readmeResponseModel = new PluginReadmeResponseModel();
+                readmeResponseModel.Content = readmeModel?.Content ?? "";
+                readmeResponseModel.PluginId = pluginId;
+
+                responseData.code = 1;
+                responseData.message = "查看文档成功";
+                responseData.data = readmeResponseModel;
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "查看文档失败: " + ex.Message;
             }
 
             return await Task.FromResult(responseData);
