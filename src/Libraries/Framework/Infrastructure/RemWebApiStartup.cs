@@ -72,16 +72,23 @@ namespace Framework.Infrastructure
                     {
                         ValidateAudience = false,
                         // 多长时间来验证以下 Token
-                        ClockSkew = TimeSpan.FromMinutes(5),
+                        ClockSkew = TimeSpan.FromSeconds(5),
                         // 我们要求 Token 需要有超时时间这个参数
-                        RequireExpirationTime = true
+                        RequireExpirationTime = true,
                     };
 
                     options.RequireHttpsMetadata = false;
                 });
 
             // adds an authorization policy to make sure the token is for scope 'api1'
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("webapi", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "webapi");
+                });
+            });
             #endregion
         }
 

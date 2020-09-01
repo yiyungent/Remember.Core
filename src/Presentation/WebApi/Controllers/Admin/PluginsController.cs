@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
+using Framework.Authorization;
 using PluginCore;
 using PluginCore.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using WebApi.Models.Common;
 namespace WebApi.Controllers.Admin
 {
     [Route("api/admin/[controller]/[action]")]
+    [WebApiAuthorize]
     [ApiController]
     public class PluginsController : ControllerBase
     {
