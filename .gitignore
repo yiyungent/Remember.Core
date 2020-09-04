@@ -264,3 +264,6 @@ __pycache__/
 
 
 /src/Presentation/WebApi/Plugins
+
+# VuePress
+docs/.vuepress/dist/

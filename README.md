@@ -7,6 +7,7 @@
 
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/Remember.Core.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/Remember.Core.svg?style=flat)](https://github.com/yiyungent/Remember.Core/blob/master/LICENSE)
+![.NET Core](https://github.com/yiyungent/Remember.Core/workflows/.NET%20Core/badge.svg)
 
 <!-- [English](README_en.md) -->
 
