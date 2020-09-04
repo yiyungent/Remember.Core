@@ -3,12 +3,12 @@
  * @Description:
  */
 module.exports = {
-  title: "SimCaptcha",
-  description: "一个简单易用的点触验证码",
-  base: "/SimCaptcha/",
+  title: "Remember.Core",
+  description: "一个多人博客系统",
+  base: "/Remember.Core/",
   themeConfig: {
     // 假定是 GitHub. 同时也可以是一个完整的 GitLab URL
-    repo: "yiyungent/SimCaptcha",
+    repo: "yiyungent/Remember.Core",
     // 自定义仓库链接文字。默认从 `themeConfig.repo` 中自动推断为
     // "GitHub"/"GitLab"/"Bitbucket" 其中之一，或是 "Source"。
     repoLabel: "GitHub",
@@ -31,10 +31,10 @@ module.exports = {
       { text: "首页", link: "/" },
       { text: "指南", link: "/Guide/" },
       {
-        text: "SimCaptcha",
+        text: "Remember.Core",
         items: [
-          { text: "SimCaptcha", link: "/SimCaptcha/" },
-          { text: "SimCaptcha.AspNetCore", link: "/SimCaptcha.AspNetCore/" },
+          { text: "Remember.Core", link: "/Remember.Core/" },
+          { text: "Remember.Core.AspNetCore", link: "/Remember.Core.AspNetCore/" },
         ],
       },
       {
@@ -61,18 +61,18 @@ module.exports = {
           ],
         },
       ],
-      "/SimCaptcha/": [
+      "/Remember.Core/": [
         {
-          title: "SimCaptcha", // 必要的
-          path: "/SimCaptcha/",
+          title: "Remember.Core", // 必要的
+          path: "/Remember.Core/",
           collapsable: false, // 可选的, 默认值是 true,
           // children: [{ title: "API", path: "api" }],
         },
       ],
-      "/SimCaptcha.AspNetCore/": [
+      "/Remember.Core.AspNetCore/": [
         {
-          title: "SimCaptcha.AspNetCore", // 必要的
-          path: "/SimCaptcha.AspNetCore/",
+          title: "Remember.Core.AspNetCore", // 必要的
+          path: "/Remember.Core.AspNetCore/",
           collapsable: false, // 可选的, 默认值是 true,
           // children: [{ title: "API", path: "api" }],
         },
