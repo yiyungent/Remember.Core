@@ -513,6 +513,83 @@ namespace WebApi.Controllers.Admin
         }
         #endregion
 
+        #region 设置
+        [HttpGet]
+        public async Task<ActionResult<ResponseModel>> Settings(string pluginId)
+        {
+            ResponseModel responseData = new ResponseModel();
+
+            try
+            {
+                #region 效验
+                var pluginConfigModel = PluginConfigModelFactory.Create();
+                var allPluginConfigModels = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins)
+                    .Concat(pluginConfigModel.UninstalledPlugins).ToList();
+
+                if (!allPluginConfigModels.Contains(pluginId))
+                {
+                    responseData.code = -1;
+                    responseData.message = $"查看设置失败: 不存在 {pluginId} 插件";
+                    return await Task.FromResult(responseData);
+                }
+
+                #endregion
+
+                string settingsJsonStr = PluginSettingsModelFactory.Create(pluginId);
+
+
+                responseData.code = 1;
+                responseData.message = "查看设置成功";
+                responseData.data = settingsJsonStr ?? "无设置项";
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "查看设置失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ResponseModel>> Settings(PluginSettingsInputModel inputModel)
+        {
+            ResponseModel responseData = new ResponseModel();
+
+            try
+            {
+                #region 效验
+                var pluginConfigModel = PluginConfigModelFactory.Create();
+                var allPluginConfigModels = pluginConfigModel.EnabledPlugins.Concat(pluginConfigModel.DisabledPlugins)
+                    .Concat(pluginConfigModel.UninstalledPlugins).ToList();
+
+                if (!allPluginConfigModels.Contains(inputModel.PluginId))
+                {
+                    responseData.code = -1;
+                    responseData.message = $"设置失败: 不存在 {inputModel.PluginId} 插件";
+                    return await Task.FromResult(responseData);
+                }
+
+                #endregion
+
+                inputModel.Data = inputModel.Data ?? "";
+                PluginSettingsModelFactory.Save(pluginSettingsJsonStr: inputModel.Data, pluginId: inputModel.PluginId);
+
+
+                responseData.code = 1;
+                responseData.message = "设置成功";
+                responseData.data = inputModel.Data;
+            }
+            catch (Exception ex)
+            {
+                responseData.code = -1;
+                responseData.message = "设置失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseData);
+        }
+        #endregion
+
         #endregion
 
 
