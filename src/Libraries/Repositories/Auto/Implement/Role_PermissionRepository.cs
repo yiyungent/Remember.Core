@@ -9,11 +9,11 @@ using Repositories.Interface;
 
 namespace Repositories.Implement
 {
-    public partial class MessageRepository : BaseRepository<Message>, IMessageRepository
+    public partial class Role_PermissionRepository : BaseRepository<Role_Permission>, IRole_PermissionRepository
     {
         private readonly RemDbContext _context;
 
-        public MessageRepository(RemDbContext context) : base(context)
+        public Role_PermissionRepository(RemDbContext context) : base(context)
         {
             this._context = context;
         }

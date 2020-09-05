@@ -8,6 +8,6 @@ using Services.Core;
 
 namespace Services.Interface
 {
-    public partial interface IArticle_ParticipantService : IService<Article_Participant>
+    public partial interface IPermissionInfoService : IService<PermissionInfo>
     { }
 }

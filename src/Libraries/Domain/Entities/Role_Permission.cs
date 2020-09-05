@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public partial class Role_Function : BaseEntity
+    public partial class Role_Permission : BaseEntity
     {
         [Key]
         public int ID { get; set; }
@@ -20,9 +20,9 @@ namespace Domain.Entities
         [ForeignKey("RoleInfoId")]
         public virtual RoleInfo RoleInfo { get; set; }
 
-        public int FunctionInfoId { get; set; }
-        [ForeignKey("FunctionInfoId")]
-        public virtual FunctionInfo FunctionInfo { get; set; }
+        public int PermissionInfoId { get; set; }
+        [ForeignKey("PermissionInfoId")]
+        public virtual PermissionInfo PermissionInfo { get; set; }
 
         #endregion
     }

@@ -38,8 +38,6 @@ namespace Repositories.Core
 
         public virtual DbSet<Article_Like> Article_Like { get; set; }
 
-        public virtual DbSet<Article_Participant> Article_Participant { get; set; }
-
         public virtual DbSet<CatInfo> CatInfo { get; set; }
 
         public virtual DbSet<Comment> Comment { get; set; }
@@ -54,15 +52,11 @@ namespace Repositories.Core
 
         public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
 
-        public virtual DbSet<FunctionInfo> FunctionInfo { get; set; }
+        public virtual DbSet<PermissionInfo> FunctionInfo { get; set; }
 
         public virtual DbSet<LogInfo> LogInfo { get; set; }
 
-        public virtual DbSet<Message> Message { get; set; }
-
-        public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
-
-        public virtual DbSet<Role_Function> Role_Function { get; set; }
+        public virtual DbSet<Role_Permission> Role_Permission { get; set; }
 
         public virtual DbSet<Role_Menu> Role_Menu { get; set; }
 
@@ -120,11 +114,11 @@ namespace Repositories.Core
                 //.WithRequired(m => m.RoleInfo)
                 .WithOne(m => m.RoleInfo)
                 .HasForeignKey(m => m.RoleInfoId);
-            modelBuilder.Entity<FunctionInfo>()
-                .HasMany(m => m.Role_Functions)
+            modelBuilder.Entity<PermissionInfo>()
+                .HasMany(m => m.Role_Permissions)
                 //.WithRequired(m => m.FunctionInfo)
-                .WithOne(m => m.FunctionInfo)
-                .HasForeignKey(m => m.FunctionInfoId);
+                .WithOne(m => m.PermissionInfo)
+                .HasForeignKey(m => m.PermissionInfoId);
 
             modelBuilder.Entity<RoleInfo>()
                 .HasMany(m => m.Role_Menus)

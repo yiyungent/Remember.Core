@@ -21,9 +21,9 @@ namespace Domain
         }
     }
 
-    public class FunctionInfo_Compare : IEqualityComparer<FunctionInfo>
+    public class FunctionInfo_Compare : IEqualityComparer<PermissionInfo>
     {
-        public bool Equals(FunctionInfo x, FunctionInfo y)
+        public bool Equals(PermissionInfo x, PermissionInfo y)
         {
             if (x == null || y == null)
             {
@@ -32,7 +32,7 @@ namespace Domain
             return x.ID == y.ID;
         }
 
-        public int GetHashCode(FunctionInfo obj)
+        public int GetHashCode(PermissionInfo obj)
         {
             throw new NotImplementedException();
         }

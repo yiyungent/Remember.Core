@@ -9,6 +9,6 @@ using System.Linq;
 
 namespace Repositories.Interface
 {
-    public partial interface IArticle_ParticipantRepository : IRepository<Article_Participant>
+    public partial interface IRole_PermissionRepository : IRepository<Role_Permission>
     { }
 }

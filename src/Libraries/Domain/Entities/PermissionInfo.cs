@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public partial class FunctionInfo : BaseEntity
+    public partial class PermissionInfo : BaseEntity
     {
         [Key]
         public int ID { get; set; }
@@ -55,7 +55,7 @@ namespace Domain.Entities
         /// <summary>
         /// ╫ги╚-х╗оч
         /// </summary>
-        public virtual ICollection<Role_Function> Role_Functions { get; set; }
+        public virtual ICollection<Role_Permission> Role_Permissions { get; set; }
 
         #endregion
     }

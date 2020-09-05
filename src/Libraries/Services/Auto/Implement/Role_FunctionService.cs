@@ -10,10 +10,10 @@ using Services.Interface;
 
 namespace Services.Implement
 {
-    public partial class Role_FunctionService : BaseService<Role_Function>, IRole_FunctionService
+    public partial class Role_FunctionService : BaseService<Role_Permission>, IRole_PermissionService
     {
-        private readonly IRole_FunctionRepository _repository;
-        public Role_FunctionService(IRole_FunctionRepository repository) : base(repository)
+        private readonly IRole_PermissionRepository _repository;
+        public Role_FunctionService(IRole_PermissionRepository repository) : base(repository)
         {
             this._repository = repository;
         }

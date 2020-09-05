@@ -8,6 +8,6 @@ using Services.Core;
 
 namespace Services.Interface
 {
-    public partial interface IFunctionInfoService : IService<FunctionInfo>
+    public partial interface IRole_PermissionService : IService<Role_Permission>
     { }
 }

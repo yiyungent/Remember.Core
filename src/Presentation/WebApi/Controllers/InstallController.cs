@@ -17,12 +17,12 @@ namespace WebApi.Controllers
         private readonly ISettingService _settingService;
         private readonly IThemeTemplateService _themeTemplateService;
         private readonly ISys_MenuService _sys_MenuService;
-        private readonly IFunctionInfoService _functionInfoService;
+        private readonly IPermissionInfoService _permissionInfoService;
         private readonly IRoleInfoService _roleInfoService;
         private readonly IArticleService _articleService;
         private readonly IFavoriteService _favoriteService;
         private readonly IRole_MenuService _role_MenuService;
-        private readonly IRole_FunctionService _role_FunctionService;
+        private readonly IRole_PermissionService _role_PermissionService;
         private readonly ICatInfoService _catInfoService;
         private readonly IArticle_CatService _article_CatService;
         #endregion
@@ -54,12 +54,12 @@ namespace WebApi.Controllers
                                  ISettingService settingService,
                                  IThemeTemplateService themeTemplateService,
                                  ISys_MenuService sys_MenuService,
-                                 IFunctionInfoService functionInfoService,
+                                 IPermissionInfoService permissionInfoService,
                                  IRoleInfoService roleInfoService,
                                  IArticleService articleService,
                                  IFavoriteService favoriteService,
                                  IRole_MenuService role_MenuService,
-                                 IRole_FunctionService role_FunctionService,
+                                 IRole_PermissionService role_PermissionService,
                                  ICatInfoService catInfoService,
                                  IArticle_CatService article_CatService)
         {
@@ -67,12 +67,12 @@ namespace WebApi.Controllers
             this._settingService = settingService;
             this._themeTemplateService = themeTemplateService;
             this._sys_MenuService = sys_MenuService;
-            this._functionInfoService = functionInfoService;
+            this._permissionInfoService = permissionInfoService;
             this._roleInfoService = roleInfoService;
             this._articleService = articleService;
             this._favoriteService = favoriteService;
             this._role_MenuService = role_MenuService;
-            this._role_FunctionService = role_FunctionService;
+            this._role_PermissionService = role_PermissionService;
             this._catInfoService = catInfoService;
             this._article_CatService = article_CatService;
         }
@@ -134,7 +134,7 @@ namespace WebApi.Controllers
             InitSetting();
             InitThemeTemplate();
             InitSys_Menu();
-            InitFunctionInfo();
+            InitPermissionInfo();
             InitRoleInfo();
             InitUserInfo();
 
@@ -1220,19 +1220,19 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 初始化操作表
+        #region 初始化权限表
         /// <summary>
         /// 放入此表，即此action需要权限验证
         /// </summary>
-        private void InitFunctionInfo()
+        private void InitPermissionInfo()
         {
             try
             {
-                ShowMessage("开始初始化操作表");
+                ShowMessage("开始初始化权限表");
                 // ID: 1
                 // 特殊抽象操作---决定是否能进入管理中心
                 // 只要拥有系统菜单下的任一操作权限 --> 就会拥有此对应系统菜单项 --> 就会拥有进入管理中心，即拥有此抽象的特殊操作权限(Admin.Home.Index  (后台)管理中心(框架))
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Home.Index",
                     Name = "(后台)管理中心(框架)"
@@ -1255,7 +1255,7 @@ namespace WebApi.Controllers
                     {
                         if (i == actionNames.Length - 1)
                         {
-                            this._functionInfoService.CreateAsync(new FunctionInfo()
+                            this._permissionInfoService.CreateAsync(new PermissionInfo()
                             {
                                 Name = menu.Name + "-主页",
                                 AuthKey = menu.AreaName + "." + menu.ControllerName + "." + actionNames[i],
@@ -1264,7 +1264,7 @@ namespace WebApi.Controllers
                         }
                         else
                         {
-                            this._functionInfoService.CreateAsync(new FunctionInfo()
+                            this._permissionInfoService.CreateAsync(new PermissionInfo()
                             {
                                 Name = menu.Name + "-" + funcNames[i],
                                 AuthKey = menu.AreaName + "." + menu.ControllerName + "." + actionNames[i],
@@ -1277,25 +1277,25 @@ namespace WebApi.Controllers
 
                 #region 文章管理
                 Sys_Menu article_Sys_Menu = this._sys_MenuService.FindAsync(m => m.ControllerName == "Article").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Article.Create",
                     Name = "文章管理-创建",
                     Sys_Menu = article_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Article.Index",
                     Name = "文章管理-列表",
                     Sys_Menu = article_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Article.Edit",
                     Name = "文章管理-编辑",
                     Sys_Menu = article_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Article.Delete",
                     Name = "文章管理-删除",
@@ -1306,7 +1306,7 @@ namespace WebApi.Controllers
                 #region 角色管理
                 // 角色RoleInfo菜单 增加授权操作
                 Sys_Menu roleInfo_Sys_Menu = this._sys_MenuService.FindAsync(m => m.ControllerName == "RoleInfo").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.RoleInfo.AssignPower",
                     Name = "角色管理-授权",
@@ -1316,49 +1316,49 @@ namespace WebApi.Controllers
 
                 #region 主题模板 ThemeTemplate
                 Sys_Menu themeTemplate_Sys_Menu = this._sys_MenuService.FindAsync(m => m.ControllerName == "ThemeTemplate").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.Index",
                     Name = "主题模板-列表",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.UploadTemplate",
                     Name = "主题模板-上传本地主题模板页面",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.UploadTemplateFile",
                     Name = "主题模板-上传本地主题模板",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.InstallZip",
                     Name = "主题模板-安装",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.Uninstall",
                     Name = "主题模板-卸载",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.DeleteInstallZip",
                     Name = "主题模板-删除安装包",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.OpenClose",
                     Name = "主题模板-启用禁用",
                     Sys_Menu = themeTemplate_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.SetDefault",
                     Name = "主题模板-设置为默认模板",
@@ -1367,7 +1367,7 @@ namespace WebApi.Controllers
                 #endregion
 
                 #region 单独操作（不放在系统菜单下）
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.SelectTemplate",
                     Name = "主题模板-选择模板",
@@ -1377,31 +1377,31 @@ namespace WebApi.Controllers
 
                 #region 全局-站点设置
                 Sys_Menu setting_Sys_Menu = this._sys_MenuService.FindAsync(m => m.ControllerName == "Setting").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Setting.Index",
                     Name = "站点设置-常规",
                     Sys_Menu = setting_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Setting.WebApi",
                     Name = "站点设置-WebApi",
                     Sys_Menu = setting_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Setting.FindPwd",
                     Name = "站点设置-找回密码",
                     Sys_Menu = setting_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Setting.SysEmail",
                     Name = "站点设置-系统邮箱",
                     Sys_Menu = setting_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.Setting.Advanced",
                     Name = "站点设置-高级",
@@ -1411,13 +1411,13 @@ namespace WebApi.Controllers
 
                 #region 全局-SEO设置
                 Sys_Menu setting_seo = this._sys_MenuService.FindAsync(m => m.ControllerName == "SEO").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.SEO.Index",
                     Name = "SEO设置-首页",
                     Sys_Menu = setting_seo
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.SEO.Article",
                     Name = "SEO设置-文章页",
@@ -1427,13 +1427,13 @@ namespace WebApi.Controllers
 
                 #region 访问日志
                 Sys_Menu logInfo_Sys_Menu = this._sys_MenuService.FindAsync(m => m.ControllerName == "LogInfo").Result;
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.LogInfo.Index",
                     Name = "访问日志-列表",
                     Sys_Menu = logInfo_Sys_Menu
                 });
-                this._functionInfoService.CreateAsync(new FunctionInfo
+                this._permissionInfoService.CreateAsync(new PermissionInfo
                 {
                     AuthKey = "Admin.LogInfo.Delete",
                     Name = "访问日志-删除",
@@ -1459,7 +1459,7 @@ namespace WebApi.Controllers
                 ShowMessage("开始初始化角色表");
 
                 var allMenu = this._sys_MenuService.AllAsync().Result.ToList();
-                var allFunction = this._functionInfoService.AllAsync().Result.ToList();
+                var allFunction = this._permissionInfoService.AllAsync().Result.ToList();
 
                 // 系统组
                 #region 系统组
@@ -1467,7 +1467,7 @@ namespace WebApi.Controllers
                 {
                     Name = "超级管理员",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 foreach (var menu in allMenu)
                 {
@@ -1479,9 +1479,9 @@ namespace WebApi.Controllers
                 }
                 foreach (var func in allFunction)
                 {
-                    admin_roleInfo.Role_Functions.Add(new Role_Function
+                    admin_roleInfo.Role_Functions.Add(new Role_Permission
                     {
-                        FunctionInfoId = func.ID,
+                        PermissionInfoId = func.ID,
                         CreateTime = DateTime.Now
                     });
                 }
@@ -1492,7 +1492,7 @@ namespace WebApi.Controllers
                 {
                     Name = "游客",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_2);
                 // 3
@@ -1500,7 +1500,7 @@ namespace WebApi.Controllers
                 {
                     Name = "副站长",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_3);
                 // 4
@@ -1508,7 +1508,7 @@ namespace WebApi.Controllers
                 {
                     Name = "运营",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_4);
                 // 5
@@ -1516,7 +1516,7 @@ namespace WebApi.Controllers
                 {
                     Name = "站长",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_5);
                 #endregion
@@ -1528,7 +1528,7 @@ namespace WebApi.Controllers
                 {
                     Name = "蓝钻",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_6);
                 // 7
@@ -1536,7 +1536,7 @@ namespace WebApi.Controllers
                 {
                     Name = "红钻",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Function>()
+                    Role_Functions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_7);
                 #endregion

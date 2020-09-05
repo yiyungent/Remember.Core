@@ -10,10 +10,10 @@ using Services.Interface;
 
 namespace Services.Implement
 {
-    public partial class FunctionInfoService : BaseService<FunctionInfo>, IFunctionInfoService
+    public partial class FunctionInfoService : BaseService<PermissionInfo>, IPermissionInfoService
     {
-        private readonly IFunctionInfoRepository _repository;
-        public FunctionInfoService(IFunctionInfoRepository repository) : base(repository)
+        private readonly IPermissionInfoRepository _repository;
+        public FunctionInfoService(IPermissionInfoRepository repository) : base(repository)
         {
             this._repository = repository;
         }
