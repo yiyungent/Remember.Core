@@ -1,31 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
-using Core.Configuration;
-using Core.Infrastructure;
-using Core.Infrastructure.DependencyManagement;
-using Microsoft.Extensions.DependencyInjection;
-using Repositories.Core;
-using Repositories.Implement;
-using Repositories.Interface;
-using Services.Core;
-using Services.Implement;
-using Services.Interface;
+using Autofac.Core.Registration;
 
-namespace Framework.Infrastructure
+namespace WebApi.Infrastructure
 {
-    public class DependencyRegistrar : IDependencyRegistrar
+    public class AutofacApplicationModule : Autofac.Module
     {
-        public void Register(ContainerBuilder builder, ITypeFinder typeFinder, RemConfig config)
+        protected override void Load(ContainerBuilder builder)
         {
-            //file provider
-            builder.RegisterType<RemFileProvider>().As<IRemFileProvider>().InstancePerLifetimeScope();
-
+            #region 注册服务，仓储层
             // 基于接口的注册
             var basePath = AppContext.BaseDirectory;
             var servicesDllFile = Path.Combine(basePath, "Services.dll");
@@ -42,9 +30,7 @@ namespace Framework.Infrastructure
             builder.RegisterAssemblyTypes(assemblysRepository)
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
-
+            #endregion
         }
-
-        public int Order => 0;
     }
 }
