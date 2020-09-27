@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Remember.Core</h1>
 
-> :cake: 一个多人博客系统
+> :dolphin: .NET Web 应用框架
 
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/Remember.Core.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/Remember.Core.svg?style=flat)](https://github.com/yiyungent/Remember.Core/blob/master/LICENSE)
@@ -13,7 +13,7 @@
 
 ## 介绍
 
-一个多人博客系统
+一个小巧但功能强大的 Web 应用框架, 具有优雅、高效、简洁、富于表达力等优点。采用 前后端分离 设计，是崇尚开发效率的全栈框架
 
 - **简单** - 享受5分钟安装, 轻松上手。
 - **易扩展** - 松散架构, 轻松扩展。

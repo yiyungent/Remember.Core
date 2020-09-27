@@ -86,6 +86,13 @@ namespace WebApi.Controllers.Admin
         }
         #endregion
 
+        #region 创建
+        public async Task<ActionResult<ResponseModel>> Create()
+        {
+            
+        }
+        #endregion
+
         #endregion
     }
 }
