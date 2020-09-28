@@ -1,0 +1,8 @@
+﻿{
+	"PluginId": "GetUserInfo",
+	"DisplayName": "获取一个用户",
+	"Description": "这是一个示例插件2号。",
+	"Author": "yiyun",
+	"Version": "0.1.0",
+	"SupportedVersions": [ "0.0.1" ]
+}

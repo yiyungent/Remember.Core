@@ -13,6 +13,6 @@ namespace WebApi.Models.Admin.Article
 
         public string Content { get; set; }
 
-        public int 
+        //public int 
     }
 }

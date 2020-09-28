@@ -5,9 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Libraries\Domain\Domain.csproj" />
-    <ProjectReference Include="..\..\src\Libraries\Framework\Framework.csproj" />
-    <ProjectReference Include="..\..\src\Libraries\Services\Services.csproj" />
+    <ProjectReference Include="..\..\src\Framework\Libraries\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\src\Framework\Libraries\Framework\Framework.csproj" />
+    <ProjectReference Include="..\..\src\Framework\Libraries\PluginCore\PluginCore.csproj" />
+    <ProjectReference Include="..\..\src\Framework\Libraries\Services\Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

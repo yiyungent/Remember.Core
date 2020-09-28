@@ -7,25 +7,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Persentation", "2.Persent
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Libraries", "1.Libraries", "{102891CE-ED80-468F-98E9-1363D6F6FEEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Presentation\WebApi\WebApi.csproj", "{835AFF1F-AC3B-4A15-936F-972F605D7C4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Framework\Presentation\WebApi\WebApi.csproj", "{835AFF1F-AC3B-4A15-936F-972F605D7C4A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Libraries\Domain\Domain.csproj", "{0C91A998-D19D-4621-841D-F3E03917C543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Framework\Libraries\Domain\Domain.csproj", "{0C91A998-D19D-4621-841D-F3E03917C543}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Libraries\Core\Core.csproj", "{880EF577-C7C8-480C-B2AE-5BE2C2225CF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Framework\Libraries\Core\Core.csproj", "{880EF577-C7C8-480C-B2AE-5BE2C2225CF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapperConfig", "src\Libraries\AutoMapperConfig\AutoMapperConfig.csproj", "{7BA9967B-003E-454F-A7BC-50F5455E3F96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapperConfig", "src\Framework\Libraries\AutoMapperConfig\AutoMapperConfig.csproj", "{7BA9967B-003E-454F-A7BC-50F5455E3F96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "src\Libraries\Framework\Framework.csproj", "{7DC485B8-09F0-4E38-85A9-33ECB0F7F65B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "src\Framework\Libraries\Framework\Framework.csproj", "{7DC485B8-09F0-4E38-85A9-33ECB0F7F65B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "src\Libraries\Repositories\Repositories.csproj", "{04F0C69B-4CBA-4C40-A7A4-98F9182F83D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "src\Framework\Libraries\Repositories\Repositories.csproj", "{04F0C69B-4CBA-4C40-A7A4-98F9182F83D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "src\Libraries\Services\Services.csproj", "{2E0EF346-24B0-44BF-8CDD-CEC906A90F34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "src\Framework\Libraries\Services\Services.csproj", "{2E0EF346-24B0-44BF-8CDD-CEC906A90F34}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "src\Libraries\ViewModel\ViewModel.csproj", "{B6469351-27E5-4A6C-BF1E-0FAB5E9856FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "src\Framework\Libraries\ViewModel\ViewModel.csproj", "{B6469351-27E5-4A6C-BF1E-0FAB5E9856FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Tools", "3.Tools", "{F87DF8F0-1857-4B1A-BBB6-88A8C59C1EBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebInstaller", "src\Tools\WebInstaller\WebInstaller.csproj", "{31213FC8-BDE8-43BF-96F8-E2BCBF60E9B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebInstaller", "src\Framework\Tools\WebInstaller\WebInstaller.csproj", "{31213FC8-BDE8-43BF-96F8-E2BCBF60E9B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Plugins", "4.Plugins", "{4869ED6B-92B9-4516-A208-74BFC9F5C4D1}"
 EndProject
@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "plugins\Hello
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetUserInfo", "plugins\GetUserInfo\GetUserInfo.csproj", "{A4F9AAFC-A86B-4196-80E8-7D8565322C06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginCore", "src\Libraries\PluginCore\PluginCore.csproj", "{3C3A9239-D189-43F1-A5E1-06E8F6844513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginCore", "src\Framework\Libraries\PluginCore\PluginCore.csproj", "{3C3A9239-D189-43F1-A5E1-06E8F6844513}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.App", "5.App", "{D80C82AF-39A0-4B7F-99D2-1A07FB1578C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

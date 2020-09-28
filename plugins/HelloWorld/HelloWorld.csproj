@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Libraries\Framework\Framework.csproj" />
+    <ProjectReference Include="..\..\src\Framework\Libraries\Framework\Framework.csproj" />
   </ItemGroup>
 
   <ItemGroup>
