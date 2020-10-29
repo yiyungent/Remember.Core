@@ -22,6 +22,22 @@
 
 - 暂无
 
+## 运行截图
+
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-33-40.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-40-28.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-41-59.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-42-27.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-44-05.png)
+
+## 使用
+
+本框架主要提供了插件框架的简单实现样板，如果你想要实现一个Web插件框架，你可以参考本框架的代码。
+目前运行本框架 还需要 同时运行 以下两个
+
+- [remember-default-admin-theme](https://github.com/yiyungent/remember-default-admin-theme) 本框架的 Vue.js 前端
+- [UHub](https://github.com/yiyungent/UHub) 统一身份认证
+
 ## 环境
 
 - 运行环境: .NET Core 3.1
@@ -33,7 +49,6 @@
 - [remember-app](https://github.com/yiyungent/remember-app)
 - [remember-uni-app](https://github.com/yiyungent/remember-uni-app)
 - [remember](https://github.com/yiyungent/remember)
-
 
 ## 鸣谢
 

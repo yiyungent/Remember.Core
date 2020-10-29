@@ -4,7 +4,7 @@
  */
 module.exports = {
   title: "Remember.Core",
-  description: "一个多人博客系统",
+  description: ".NET Web 应用框架",
   base: "/Remember.Core/",
   themeConfig: {
     // 假定是 GitHub. 同时也可以是一个完整的 GitLab URL
@@ -29,70 +29,70 @@ module.exports = {
 
     nav: [
       { text: "首页", link: "/" },
-      { text: "指南", link: "/Guide/" },
-      {
-        text: "Remember.Core",
-        items: [
-          { text: "Remember.Core", link: "/Remember.Core/" },
-          { text: "Remember.Core.AspNetCore", link: "/Remember.Core.AspNetCore/" },
-        ],
-      },
-      {
-        text: "Web SDK",
-        items: [
-          { text: "sim-captcha-js", link: "/WebSDK/sim-captcha-js/" },
-          { text: "vue-sim-captcha", link: "/WebSDK/vue-sim-captcha/" },
-        ],
-      },
+      // { text: "指南", link: "/Guide/" },
+      // {
+      //   text: "Remember.Core",
+      //   items: [
+      //     { text: "Remember.Core", link: "/Remember.Core/" },
+      //     { text: "Remember.Core.AspNetCore", link: "/Remember.Core.AspNetCore/" },
+      //   ],
+      // },
+      // {
+      //   text: "Web SDK",
+      //   items: [
+      //     { text: "sim-captcha-js", link: "/WebSDK/sim-captcha-js/" },
+      //     { text: "vue-sim-captcha", link: "/WebSDK/vue-sim-captcha/" },
+      //   ],
+      // },
     ],
 
     sidebarDepth: 2,
-    sidebar: {
-      "/Guide/": [
-        {
-          title: "指南", // 必要的
-          path: "/Guide/",
-          collapsable: false, // 可选的, 默认值是 true,
-          children: [
-            {
-              title: "依赖",
-              path: "dependence",
-            },
-          ],
-        },
-      ],
-      "/Remember.Core/": [
-        {
-          title: "Remember.Core", // 必要的
-          path: "/Remember.Core/",
-          collapsable: false, // 可选的, 默认值是 true,
-          // children: [{ title: "API", path: "api" }],
-        },
-      ],
-      "/Remember.Core.AspNetCore/": [
-        {
-          title: "Remember.Core.AspNetCore", // 必要的
-          path: "/Remember.Core.AspNetCore/",
-          collapsable: false, // 可选的, 默认值是 true,
-          // children: [{ title: "API", path: "api" }],
-        },
-      ],
-      "/WebSDK/sim-captcha-js/": [
-        {
-          title: "sim-captcha-js", // 必要的
-          path: "/WebSDK/sim-captcha-js/",
-          collapsable: false, // 可选的, 默认值是 true,
-          children: [{ title: "API", path: "api" }],
-        },
-      ],
-      "/WebSDK/vue-sim-captcha/": [
-        {
-          title: "vue-sim-captcha", // 必要的
-          path: "/WebSDK/vue-sim-captcha/",
-          collapsable: false, // 可选的, 默认值是 true,
-          children: [{ title: "API", path: "api" }],
-        },
-      ],
-    },
+    // sidebar: {
+    //   "/Guide/": [
+    //     {
+    //       title: "指南", // 必要的
+    //       path: "/Guide/",
+    //       collapsable: false, // 可选的, 默认值是 true,
+    //       children: [
+    //         {
+    //           title: "依赖",
+    //           path: "dependence",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    //   "/Remember.Core/": [
+    //     {
+    //       title: "Remember.Core", // 必要的
+    //       path: "/Remember.Core/",
+    //       collapsable: false, // 可选的, 默认值是 true,
+    //       // children: [{ title: "API", path: "api" }],
+    //     },
+    //   ],
+    //   "/Remember.Core.AspNetCore/": [
+    //     {
+    //       title: "Remember.Core.AspNetCore", // 必要的
+    //       path: "/Remember.Core.AspNetCore/",
+    //       collapsable: false, // 可选的, 默认值是 true,
+    //       // children: [{ title: "API", path: "api" }],
+    //     },
+    //   ],
+    //   "/WebSDK/sim-captcha-js/": [
+    //     {
+    //       title: "sim-captcha-js", // 必要的
+    //       path: "/WebSDK/sim-captcha-js/",
+    //       collapsable: false, // 可选的, 默认值是 true,
+    //       children: [{ title: "API", path: "api" }],
+    //     },
+    //   ],
+    //   "/WebSDK/vue-sim-captcha/": [
+    //     {
+    //       title: "vue-sim-captcha", // 必要的
+    //       path: "/WebSDK/vue-sim-captcha/",
+    //       collapsable: false, // 可选的, 默认值是 true,
+    //       children: [{ title: "API", path: "api" }],
+    //     },
+    //   ],
+    // },
   },
 };
