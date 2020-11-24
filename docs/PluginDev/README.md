@@ -8,7 +8,8 @@
 
 > 一个示例插件项目结构 如下图
 
-![](/images/plugin-structure.png)
+<!-- ![](/images/plugin-structure.png) -->
+<img :src="$withBase('/images/plugin-structure.png')">
 
 #### 2. 添加 `GetUserInfoPlugin` 类 继承 `BasePlugin`
 

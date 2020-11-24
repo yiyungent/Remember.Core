@@ -13,13 +13,16 @@ Remember.Core 目前仅提供了插件框架，若你需要实现一个Web插件
 
 ## 框架技术栈
 
-![](/images/Remember.Core生态.png)
+<!-- ![](/images/Remember.Core生态.png) -->
+<img :src="$withBase('/images/Remember.Core生态.png')">
 
 ## 项目分层
 
-![](/images/project-structure.png)
+<!-- ![](/images/project-structure.png) -->
+<img :src="$withBase('/images/project-structure.png')">
 
-![](/images/PluginCore.png)
+<!-- ![](/images/PluginCore.png) -->
+<img :src="$withBase('/images/PluginCore.png')">
 
 ## 功能一览
 
@@ -29,11 +32,13 @@ Remember.Core 目前仅提供了插件框架，若你需要实现一个Web插件
 
 - **全程 `依赖注入`** - 你可在插件生命周期获取你注入的任何服务
 
-![](/images/pluginDependence.png)
+<!-- ![](/images/pluginDependence.png) -->
+<img :src="$withBase('/images/pluginDependence.png')">
 
 - **以 `约定优于配置`** 为中心的项目结构 - 只需关注你的业务
 
-![](/images/plugin-structure.png)
+<!-- ![](/images/plugin-structure.png) -->
+<img :src="$withBase('/images/plugin-structure.png')">
 
 - **一插件一 LoadContext** - 插件间彼此隔离
 
@@ -41,31 +46,39 @@ Remember.Core 目前仅提供了插件框架，若你需要实现一个Web插件
 
 - **简单易用** - `PluginFinder`、`PluginManager` 或许你仅仅需要它们
 
-![](/images/PluginFinder.png)
-![](/images/PluginManager.png)
+<!-- ![](/images/PluginFinder.png) -->
+<!-- ![](/images/PluginManager.png) -->
+<img :src="$withBase('/images/PluginFinder.png')">
+<img :src="$withBase('/images/PluginManager.png')">
 
 - **一套完整的 插件生命周期** - 在需要时做你想做
 
-![](/images/screenshot/2020-10-29-18-33-40.png)
+<!-- ![](/images/screenshot/2020-10-29-18-33-40.png) -->
+<img :src="$withBase('/images/screenshot/2020-10-29-18-33-40.png')">
 
 - **动态扩展 WebAPI** - 每个插件都是一个 WebAPI
 
-![](/images/screenshot/2020-10-29-18-40-28.png)
+<!-- ![](/images/screenshot/2020-10-29-18-40-28.png) -->
+<img :src="$withBase('/images/screenshot/2020-10-29-18-40-28.png')">
 
 - **完整插件的机制** - 从上传，设置，禁用再到卸载，一次打通
 
-![](/images/screenshot/2020-10-29-18-41-59.png)
+<!-- ![](/images/screenshot/2020-10-29-18-41-59.png) -->
+<img :src="$withBase('/images/screenshot/2020-10-29-18-41-59.png')">
 
-![](/images/screenshot/2020-10-29-18-42-27.png)
+<!-- ![](/images/screenshot/2020-10-29-18-42-27.png) -->
+<img :src="$withBase('/images/screenshot/2020-10-29-18-42-27.png')">
 
-![](/images/screenshot/2020-10-29-18-44-05.png)
+<!-- ![](/images/screenshot/2020-10-29-18-44-05.png) -->
+<img :src="$withBase('/images/screenshot/2020-10-29-18-44-05.png')">
 
 - **多数据库切换** - 让EF做它该做的事
 
 
 - **轻量的插件框架** - 易用不过如此
 
-![](/images/screenshot/2020-11-24-19-49-49.png)
+<!-- ![](/images/screenshot/2020-11-24-19-49-49.png) -->
+<img :src="$withBase('/images/screenshot/2020-11-24-19-49-49.png')">
 
 
 ## 补充
