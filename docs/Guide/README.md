@@ -16,7 +16,7 @@ Remember.Core 的前生 是 在线学习系统 [remember](https://github.com/yiy
 
 ## 项目分层
 
-![](/docs/.vuepress/public/images/project-structure.png)
+![](docs/.vuepress/public/images/project-structure.png)
 
 ## 功能一览
 
@@ -30,8 +30,8 @@ Remember.Core 的前生 是 在线学习系统 [remember](https://github.com/yiy
 - **Framework 域共享机制** - 免去重复加载
 - **简单易用** - `PluginFinder`、`PluginManager` 或许你仅仅需要它们
 
-![](/docs/.vuepress/public/images/screenshot/2020-10-29-18-33-40.png)
-![](/docs/.vuepress/public/images/screenshot/2020-10-29-18-40-28.png)
-![](/docs/.vuepress/public/images/screenshot/2020-10-29-18-41-59.png)
-![](/docs/.vuepress/public/images/screenshot/2020-10-29-18-42-27.png)
-![](/docs/.vuepress/public/images/screenshot/2020-10-29-18-44-05.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-33-40.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-40-28.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-41-59.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-42-27.png)
+![](docs/.vuepress/public/images/screenshot/2020-10-29-18-44-05.png)

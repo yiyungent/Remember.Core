@@ -29,7 +29,7 @@ module.exports = {
 
     nav: [
       { text: "首页", link: "/" },
-      // { text: "指南", link: "/Guide/" },
+      { text: "指南", link: "/Guide/" },
       // {
       //   text: "Remember.Core",
       //   items: [
