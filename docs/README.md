@@ -4,8 +4,8 @@ heroImage: /images/logo.png
 heroText: Remember.Core
 tagline: 三年沉淀，逐梦不辍，日夜兼程
 actionText: 快速上手 →
-# actionLink: /Guide/
-actionLink: /
+actionLink: /Guide/
+# actionLink: /
 features:
 - title: 简洁友好
   details: 统一的设计规范，精心打磨的操作界面回应你的期待。
