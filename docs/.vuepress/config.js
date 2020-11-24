@@ -30,13 +30,13 @@ module.exports = {
     nav: [
       { text: "首页", link: "/" },
       { text: "指南", link: "/Guide/" },
-      // {
-      //   text: "Remember.Core",
-      //   items: [
-      //     { text: "Remember.Core", link: "/Remember.Core/" },
-      //     { text: "Remember.Core.AspNetCore", link: "/Remember.Core.AspNetCore/" },
-      //   ],
-      // },
+      {
+        text: "开发文档",
+        items: [
+          { text: "插件开发", link: "/PluginDev/" },
+          // { text: "Remember.Core.AspNetCore", link: "/Remember.Core.AspNetCore/" },
+        ],
+      },
       // {
       //   text: "Web SDK",
       //   items: [
