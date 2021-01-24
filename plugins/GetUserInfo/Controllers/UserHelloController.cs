@@ -26,7 +26,7 @@ namespace WebApi.Controllers
 
         public ActionResult Get()
         {
-            UserInfo userInfo = _userInfoService.FirstOrDefaultAsync(m => !m.IsDeleted).Result;
+            UserInfo userInfo = _userInfoService.FirstOrDefaultAsync(m => true).Result;
             SettingsModel settingsModel = PluginSettingsModelFactory.Create<SettingsModel>("GetUserInfo");
             string rtn = $"用户名: {userInfo.UserName}, 创建时间: {userInfo.CreateTime.ToString()}, Hello: {settingsModel.Hello}";
 
