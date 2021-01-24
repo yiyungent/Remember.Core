@@ -39,7 +39,7 @@ namespace WebApi.Controllers
             {
                 IList<ArticleResponseModel> viewModel = new List<ArticleResponseModel>();
                 IList<Article> articles = new List<Article>();
-                var e = await this._articleService.FilterAsync<DateTime>(1, number, m => !m.IsDeleted, m => m.CreateTime, false);
+                var e = await this._articleService.FilterAsync<DateTime>(1, number, m => true, m => m.CreateTime, false);
                 articles = e.Data.ToList();
 
 
@@ -97,7 +97,7 @@ namespace WebApi.Controllers
                 IList<ArticleResponseModel> viewModel = new List<ArticleResponseModel>();
                 IList<Article> articles = new List<Article>();
 
-                var e = await this._articleService.FilterAsync<int>(1, number, m => !m.IsDeleted, m => m.LikeNum, false);
+                var e = await this._articleService.FilterAsync<int>(1, number, m => true, m => m.LikeNum, false);
                 articles = e.Data.ToList();
 
 

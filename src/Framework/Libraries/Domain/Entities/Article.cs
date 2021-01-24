@@ -103,16 +103,6 @@ namespace Domain.Entities
         [ForeignKey("AuthorId")]
         public virtual UserInfo Author { get; set; }
 
-        /// <summary>
-        /// 删除时间：为null，则未删除
-        /// </summary>
-        public DateTime? DeletedAt { get; set; }
-
-        /// <summary>
-        /// 是否被删除
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
         #endregion
 
         public enum AStatus

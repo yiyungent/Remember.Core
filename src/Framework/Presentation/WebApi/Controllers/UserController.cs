@@ -35,7 +35,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<UserInfo>> Get(int id)
         {
-            UserInfo viewModel = await _userInfoService.FindAsync(m => m.ID == id && !m.IsDeleted);
+            UserInfo viewModel = await _userInfoService.FindAsync(m => m.ID == id);
 
             return Ok(viewModel);
         }

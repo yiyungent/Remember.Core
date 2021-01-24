@@ -51,7 +51,7 @@ namespace WebApi.Controllers.Admin
             ArticleListResponseModel responseModel = new ArticleListResponseModel();
             responseModel.PageIndex = pageIndex;
             responseModel.PageSize = pageSize;
-            var articlePageModel = await this._articleService.FilterAsync(pageIndex, pageSize, m => !m.IsDeleted, o => o.ID, false);
+            var articlePageModel = await this._articleService.FilterAsync(pageIndex, pageSize, m => true, o => o.ID, false);
             articlePageModel.Data = articlePageModel.Data.Include(m => m.Author);
             var allCat = (await this._article_CatService.AllAsync()).Include(m => m.Article).Include(m => m.CatInfo).Include(m => m.CatInfo.Parent).Include(m => m.CatInfo.Children).ToList();
 
