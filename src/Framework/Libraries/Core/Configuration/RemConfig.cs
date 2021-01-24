@@ -15,5 +15,10 @@
         public string RedisConnectionString { get; set; }
 
         public string DbType { get; set; }
+
+        /// <summary>
+        /// UHub IdentityServer4 Authority Url
+        /// </summary>
+        public string Authority { get; set; }
     }
 }

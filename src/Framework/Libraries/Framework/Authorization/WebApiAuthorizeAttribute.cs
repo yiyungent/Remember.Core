@@ -7,7 +7,7 @@ namespace Framework.Authorization
 {
     public class WebApiAuthorizeAttribute : AuthorizeAttribute
     {
-        public WebApiAuthorizeAttribute() : base("webapi")
+        public WebApiAuthorizeAttribute() : base("WebApi")
         {
 
         }

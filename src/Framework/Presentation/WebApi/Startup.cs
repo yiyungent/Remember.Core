@@ -18,6 +18,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Core;
 using WebApi.Infrastructure;
+using Framework.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -102,7 +104,7 @@ namespace WebApi
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = _configuration["Rem:Authority"];
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -115,14 +117,21 @@ namespace WebApi
 
                     options.RequireHttpsMetadata = false;
                 });
+            #endregion
 
-            // adds an authorization policy to make sure the token is for scope 'api1'
+            #region 添加授权策略-所有标记 [WebApiAuthorize] 都需要权限检查
+            services.AddSingleton<IAuthorizationHandler, WebApiAuthorizationHandler>();
+
+            // adds an authorization policy to make sure the token is for scope 'webapi'
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("webapi", policy =>
+                options.AddPolicy("WebApi", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "webapi");
+                    // 1.需要 JWT scope 中包含 Remember.Core
+                    policy.RequireClaim("scope", "Remember.Core");
+                    // 2.需要 检查是否拥有当前请求资源的权限
+                    policy.Requirements.Add(new WebApiRequirement());
                 });
             });
             #endregion
