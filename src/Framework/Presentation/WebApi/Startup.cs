@@ -127,10 +127,12 @@ namespace WebApi
             {
                 options.AddPolicy("WebApi", policy =>
                 {
+                    // 无法满足 下方任何一项：HTTP 403 错误
+                    // 1. 需登录即已认证用户
                     policy.RequireAuthenticatedUser();
-                    // 1.需要 JWT scope 中包含 Remember.Core
-                    policy.RequireClaim("scope", "Remember.Core");
-                    // 2.需要 检查是否拥有当前请求资源的权限
+                    // 2.需要 JWT scope 中包含 Remember.Core.WebApi
+                    policy.RequireClaim("scope", "Remember.Core.WebApi");
+                    // 3.需要 检查是否拥有当前请求资源的权限
                     policy.Requirements.Add(new WebApiRequirement());
                 });
             });

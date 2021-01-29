@@ -16,9 +16,17 @@ namespace PluginCore
     {
         private readonly PluginControllerManager _pluginControllerManager;
 
+        public IList<string> SkipDlls { get; set; }
+
         public PluginManager(PluginControllerManager pluginControllerManager)
         {
             _pluginControllerManager = pluginControllerManager;
+            SkipDlls = new List<string>();
+            // 获取主程序 已经存在的（不许在再加载的 dll）
+            string basePath = AppContext.BaseDirectory;
+            //Console.WriteLine($"PluginCore.PluginManager: basePath: {basePath}");
+            // { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll", "PluginCore.dll", ... }
+            SkipDlls = new DirectoryInfo(basePath).GetFiles("*.dll").Select(m => m.Name).ToList();
         }
 
         /// <summary>
@@ -51,8 +59,8 @@ namespace PluginCore
             //    context.LoadFromAssemblyName(assemblyName);
             //}
 
-            // TODO: 跳过不需要加载的 dll, eg: ASP.NET Core Shared Framework, 主程序中已有dll
-            string[] skipDlls = new string[] { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll", "PluginCore.dll" };
+            // 跳过不需要加载的 dll, eg: ASP.NET Core Shared Framework, 主程序中已有dll
+            string[] skipDlls = SkipDlls.ToArray(); //new string[] { "Core.dll", "Domain.dll", "Framework.dll", "Services.dll", "Repositories.dll", "PluginCore.dll" };
 
             #region 加载插件引用的dll
             // 加载插件引用的dll
