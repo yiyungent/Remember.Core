@@ -43,7 +43,7 @@ namespace Domain.Entities
         /// ╫ги╚-х╗оч
         /// </summary>
         [InverseProperty("RoleInfo")]
-        public virtual ICollection<Role_Permission> Role_Functions { get; set; }
+        public virtual ICollection<Role_Permission> Role_Permissions { get; set; }
 
         #endregion
 
@@ -85,9 +85,9 @@ namespace Domain.Entities
             get
             {
                 ICollection<PermissionInfo> permissionInfos = new List<PermissionInfo>();
-                if (this.Role_Functions != null && this.Role_Functions.Count >= 1)
+                if (this.Role_Permissions != null && this.Role_Permissions.Count >= 1)
                 {
-                    permissionInfos = this.Role_Functions.Select(m => m.PermissionInfo).ToList();
+                    permissionInfos = this.Role_Permissions.Select(m => m.PermissionInfo).ToList();
                 }
 
                 return permissionInfos;

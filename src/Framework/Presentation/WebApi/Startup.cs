@@ -128,7 +128,7 @@ namespace WebApi
                 options.AddPolicy("WebApi", policy =>
                 {
                     // 无法满足 下方任何一项：HTTP 403 错误
-                    // 1. 需登录即已认证用户
+                    // 1. 需登录即已认证用户  (注意：无法满足此项，即 JWT Token 无法通过效验, HTTP 401 错误)
                     policy.RequireAuthenticatedUser();
                     // 2.需要 JWT scope 中包含 Remember.Core.WebApi
                     policy.RequireClaim("scope", "Remember.Core.WebApi");
@@ -162,6 +162,9 @@ namespace WebApi
                 // 开发环境下随便跨域
                 app.UseCors("Development");
             }
+
+            var dbContext = app.ApplicationServices.GetRequiredService<RemDbContext>();
+            dbContext.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 

@@ -1467,7 +1467,7 @@ namespace WebApi.Controllers
                 {
                     Name = "超级管理员",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 foreach (var menu in allMenu)
                 {
@@ -1479,7 +1479,7 @@ namespace WebApi.Controllers
                 }
                 foreach (var func in allFunction)
                 {
-                    admin_roleInfo.Role_Functions.Add(new Role_Permission
+                    admin_roleInfo.Role_Permissions.Add(new Role_Permission
                     {
                         PermissionInfoId = func.ID,
                         CreateTime = DateTime.Now
@@ -1492,7 +1492,7 @@ namespace WebApi.Controllers
                 {
                     Name = "游客",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_2);
                 // 3
@@ -1500,7 +1500,7 @@ namespace WebApi.Controllers
                 {
                     Name = "副站长",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_3);
                 // 4
@@ -1508,7 +1508,7 @@ namespace WebApi.Controllers
                 {
                     Name = "运营",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_4);
                 // 5
@@ -1516,7 +1516,7 @@ namespace WebApi.Controllers
                 {
                     Name = "站长",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_5);
                 #endregion
@@ -1528,7 +1528,7 @@ namespace WebApi.Controllers
                 {
                     Name = "蓝钻",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_6);
                 // 7
@@ -1536,7 +1536,7 @@ namespace WebApi.Controllers
                 {
                     Name = "红钻",
                     Role_Menus = new List<Role_Menu>(),
-                    Role_Functions = new List<Role_Permission>()
+                    Role_Permissions = new List<Role_Permission>()
                 };
                 this._roleInfoService.CreateAsync(roleInfo_7);
                 #endregion

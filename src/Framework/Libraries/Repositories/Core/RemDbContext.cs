@@ -110,7 +110,7 @@ namespace Repositories.Core
                 .HasForeignKey(m => m.UserInfoId);
 
             modelBuilder.Entity<RoleInfo>()
-                .HasMany(m => m.Role_Functions)
+                .HasMany(m => m.Role_Permissions)
                 //.WithRequired(m => m.RoleInfo)
                 .WithOne(m => m.RoleInfo)
                 .HasForeignKey(m => m.RoleInfoId);
