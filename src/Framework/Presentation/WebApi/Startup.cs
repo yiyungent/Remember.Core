@@ -163,9 +163,6 @@ namespace WebApi
                 app.UseCors("Development");
             }
 
-            var dbContext = app.ApplicationServices.GetRequiredService<RemDbContext>();
-            dbContext.Database.EnsureCreated();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();

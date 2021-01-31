@@ -26,6 +26,7 @@
     <Folder Include="App_Data\TempPluginUpload\" />
     <Folder Include="Extensions\" />
     <Folder Include="Plugins\" />
+    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
   <ItemGroup>

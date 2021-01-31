@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repositories.Core;
 using Services.Interface;
 
 namespace WebApi.Controllers
@@ -13,6 +14,7 @@ namespace WebApi.Controllers
     public class InstallController : Controller
     {
         #region Fields
+        private readonly RemDbContext _dbContext;
         private readonly IUserInfoService _userInfoService;
         private readonly ISettingService _settingService;
         private readonly IThemeTemplateService _themeTemplateService;
@@ -50,7 +52,8 @@ namespace WebApi.Controllers
         #endregion
 
         #region Ctor
-        public InstallController(IUserInfoService userInfoService,
+        public InstallController(RemDbContext dbContext,
+                                 IUserInfoService userInfoService,
                                  ISettingService settingService,
                                  IThemeTemplateService themeTemplateService,
                                  ISys_MenuService sys_MenuService,
@@ -63,6 +66,7 @@ namespace WebApi.Controllers
                                  ICatInfoService catInfoService,
                                  IArticle_CatService article_CatService)
         {
+            this._dbContext = dbContext;
             this._userInfoService = userInfoService;
             this._settingService = settingService;
             this._themeTemplateService = themeTemplateService;
@@ -105,30 +109,17 @@ namespace WebApi.Controllers
         #region 输出消息
         private void ShowMessage(string message)
         {
-            //Response.WriteAsync(message + "<br>");
-            //Response.StartAsync();
-        }
-        #endregion
-
-        #region 创建数据库表结构
-        private void CreateSchema()
-        {
-            try
-            {
-                ShowMessage("开始创建数据库表结构");
-                ShowMessage("成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMessage("失败");
-                ShowMessage(ex.Message);
-            }
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Install");
+            Console.ResetColor();
+            Console.WriteLine($": {message}");
         }
         #endregion
 
         #region 创建数据库
         private void CreateDB()
         {
+            ShowMessage("开始安装");
             CreateSchema();
 
             InitSetting();
@@ -142,16 +133,33 @@ namespace WebApi.Controllers
             InitCatInfo();
             InitArticle();
             InitArticle_Cat();
+            ShowMessage("安装完成");
         }
         #endregion
 
+        #region 创建数据库表结构
+        private void CreateSchema()
+        {
+            try
+            {
+                ShowMessage("开始创建数据库表结构");
+                this._dbContext.Database.EnsureCreated();
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
 
         #region 初始化设置
         private void InitSetting()
         {
             try
             {
-                ShowMessage("初始化设置");
+                ShowMessage("开始初始化设置");
 
                 string findPwd_MailContent = "";
                 findPwd_MailContent += "<p>";
@@ -229,7 +237,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                ShowMessage("初始化主题模板");
+                ShowMessage("开始初始化主题模板");
 
                 this._themeTemplateService.CreateAsync(new ThemeTemplate
                 {
