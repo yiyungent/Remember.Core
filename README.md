@@ -11,6 +11,10 @@
 
 <!-- [English](README_en.md) -->
 
+> __注意:__              
+> 本项目插件部分现已封装为类库，如果你仅仅需要快速实现插件系统，请见
+> [PluginCore](https://github.com/yiyungent/PluginCore)
+
 ## 介绍
 
 一个轻量的 Web 应用框架, 具有优雅、高效、简洁、富于表达力等优点。采用 前后端分离 设计，是崇尚开发效率的全栈框架
@@ -205,6 +209,7 @@ public class SettingsModel : PluginSettingsModel
 - [remember-app](https://github.com/yiyungent/remember-app)
 - [remember-uni-app](https://github.com/yiyungent/remember-uni-app)
 - [remember](https://github.com/yiyungent/remember)
+- [PluginCore](https://github.com/yiyungent/PluginCore)
 
 ## 鸣谢
 
